@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var bcrypt = require("bcryptjs");
 var citiesModel = require('./City');
 var citiesMod = citiesModel;
 var itineraryModel = require('./Itinerary');
@@ -11,6 +12,8 @@ var app = express();
 var cors = require('cors');
 var port = process.env.PORT || 5000;
 var bodyParser = require('body-parser');
+const keys = require("./config/keys");
+const jwt = require("jsonwebtoken");
 
 //Access to MongoDB
 mongoose.connect('mongodb+srv://Marcosb89:m&bM1989B89@mytinerarycluster-4ovxm.mongodb.net/MYtineraryDB?retryWrites=true&w=majority', 
@@ -26,6 +29,8 @@ mongoose.connect('mongodb+srv://Marcosb89:m&bM1989B89@mytinerarycluster-4ovxm.mo
 //----------
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+app.use(passport.initialize());
+require("./config/passport");
 app.use(cors());
 app.use('/', router);
 
@@ -43,9 +48,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/Cities', (req, res) =>{
-	citiesMod
-	.find()
-	.then(data => {
+	citiesMod.find().then(data => {
 		res.json(data)
 	})
 	.catch(err => {
@@ -55,8 +58,7 @@ router.get('/Cities', (req, res) =>{
 })
 
 router.get('/Cities/:city_id', cors(),(req, res) => {
-	itineraryMod
-	.find({"id": req.params.city_id})
+	itineraryMod.find({"id": req.params.city_id})
 	.then(data => {
 		res.json(data)
 	})
@@ -80,31 +82,65 @@ router.get('/MYtinerary', (req, res) => {
 //-------------
 //POST REQUESTS
 //-------------
+
 router.post("/CreateAccount", urlencodedParser, (req, res) => {
-  usersMod;
-	if(!req.body) return res.sendStatus(400);
-	let account = new usersMod();
-	account.userName = req.body.userName;
-	account.email = req.body.email;
-	account.password = req.body.password;
-	account.urlPic = req.body.urlPic;
-
-	account.save((err, accountStored) => {
-		if(err) res.status(500).send({message: `Error posting to DB: ${err}`})
-		res.status(200).send({account: accountStored})
-	})
-
-	//const {userName, email, password, urlPic} = req.body;
-  //res.send(req.body);
-	
-});
+	usersMod.findOne({email:req.body.email}).then(user=>{
+		if (user) {
+			return res.status(400).json({ email: "Email already exists" })
+    } else {
+				let newUser = new usersMod({
+				email: req.body.email,
+				password: req.body.password,
+				urlPic: req.body.urlPic});
+				//STARTS BCRYPT	------------------------	
+				bcrypt.genSalt(10, (err, salt) => {
+					bcrypt.hash(newUser.password, salt, (err, hash) => {
+						if (err) throw err;
+						newUser.password = hash;
+						newUser
+							.save()
+							.then(user => res.json(user))
+							.catch(err => console.log(err));
+					});
+				});
+				//ENDS BCRYPT---------------------------
+			};
+	});
+});	
 
 router.post("/Login", urlencodedParser, (req, res) => {
-  usersMod;
-  if(!req.body) return res.sendStatus(400);
-	const {userName, password} = req.body;
-  res.send(req.body);
-	
+	const email = req.body.email;
+	const password = req.body.password;
+	// Find user by email
+  usersMod.findOne({ email }).then(user => {
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ emailnotfound: "Email not found" });
+    }
+// Check password
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (isMatch) {
+        // User matched - Create JWT Payload
+        const payload = {
+          id: user.id,
+					email: user.email,
+					urlPic: user.urlPic
+        };
+// Sign token
+				jwt.sign(payload,
+					keys.secretOrKey, 
+					{expiresIn: 31556926},
+					(err, token) => {
+          res.json({
+						success: true, 
+						token: "Bearer " + token});
+					}
+				);
+      } else {
+        return res.status(400).json({ passwordincorrect: "Password incorrect" });
+      }
+    });
+  });
 });
 
 //-------------

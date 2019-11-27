@@ -72,9 +72,17 @@ router.get('/CreateAccount', (req, res) => {
 	res.send('CreateAccount page');
   });
   
-  router.get('/Login', (req, res) => {
+router.get('/Login', (req, res) => {
 	res.send('Login page');
-  });
+});
+
+router.get('/api/users/google', (req, res) => {
+	res.send('LoginGoogle page');
+});
+
+router.get('/api/users/google/redirect', (req, res) => {
+	res.send('LoginGoogleRedirect page');
+});
 
 router.get('/MYtinerary', (req, res) => {
   res.send('MYtinerary page');

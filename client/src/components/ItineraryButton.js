@@ -9,7 +9,6 @@ const ItineraryButton = (props) => {
 
   return (
     <div>
-      <Button color="primary" onClick={toggle}>Toggle</Button>
       <Collapse isOpen={isOpen}>
         <Card>
           <CardBody>
@@ -17,6 +16,7 @@ const ItineraryButton = (props) => {
           </CardBody>
         </Card>
       </Collapse>
+      <Button color="primary" onClick={toggle}>Toggle</Button>
     </div>
   );
 }

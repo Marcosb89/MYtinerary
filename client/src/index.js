@@ -19,11 +19,11 @@ const routing = (
 		<Router>
 			<Switch>
 				<Route exact path='/' component={App} />
-				<Route path='/MYtinerary' component={MYtinerary} /> 
+				<Route exact path='/MYtinerary' component={MYtinerary} /> 
 				<Route exact path='/Cities' component={Cities} />
-				<Route path='/Cities/:city_id' component={Itinerary} />
-				<Route path='/CreateAccount' component={CreateAccount} /> 
-				<Route path='/Login' component={Login} />  
+				<Route exact path='/Cities/:city_id' component={Itinerary} />
+				<Route exact path='/CreateAccount' component={CreateAccount} /> 
+				<Route exact path='/Login' component={Login} />  
 				<Route component={PageError} />
 			</Switch>
 		</Router>

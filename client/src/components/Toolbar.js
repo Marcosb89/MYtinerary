@@ -15,10 +15,10 @@ const User = (props) => {
 				</DropdownToggle>
 				<DropdownMenu>
 					<DropdownItem>
-						<Link to="/CreateAccount" className="link">Create account</Link>
+						<Link to="/createAccount" className="link">Create account</Link>
 					</DropdownItem>
 					<DropdownItem>
-						<Link to="/Login" className="link">Login</Link>
+						<Link to="/login" className="link">Login</Link>
 					</DropdownItem>
 				</DropdownMenu>
 			</Dropdown>
@@ -44,10 +44,10 @@ const Menu = (props) => {
 						<Link to="/" className="link">Home</Link>
 					</DropdownItem>
 					<DropdownItem>
-						<Link to="/Mytinerary" className="link">MYtinerary</Link>
+						<Link to="/mytinerary" className="link">MYtinerary</Link>
 					</DropdownItem>
 					<DropdownItem>
-						<Link to="/Cities" className="link">Cities</Link>
+						<Link to="/cities" className="link">Cities</Link>
 					</DropdownItem>
 				</DropdownMenu>
 			</Dropdown>

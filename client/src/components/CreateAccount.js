@@ -112,7 +112,7 @@ class CreateAccount extends React.Component {
 		return (
 			<div className='mainAccount'>
 				<Toolbar />
-        <form className='accountForm' id='accountForm' method='POST' action="/CreateAccount">
+        <form className='accountForm' id='accountForm' method='POST' action="/createAccount">
 					<h1>CreateAccount</h1>
 					<div className='accountFormField'>
 						<label htmlFor='email'>Email</label>

@@ -15,7 +15,6 @@ const ItineraryButton = (props) => {
   const toggle = () => setIsOpen(!isOpen);
   return (
     <div className='viewMore'>
-      <Button color="primary" onClick={toggle}>View All</Button>
       <Collapse isOpen={isOpen}>
         <Card>
           <CardBody>
@@ -30,6 +29,7 @@ const ItineraryButton = (props) => {
           </CardBody>
         </Card>
       </Collapse>
+      <Button color="primary" onClick={toggle}>View All</Button>
     </div>
   );
 }
@@ -101,7 +101,7 @@ class Itinerary extends React.Component{
                 {this.activitiesBox()}
               </div>
             :<div></div>}
-          <Link style={{fontSize:'4vw', marginLeft:'37vw'}}to='/Cities'>Browse cities</Link>
+          <Link style={{fontSize:'4vw', marginLeft:'37vw'}}to='/cities'>Browse cities</Link>
       </div>
     )
   }

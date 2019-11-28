@@ -8,7 +8,7 @@ class Cities extends React.Component {
 
 	//GETS CITY LIST FROM THE SERVER
 	componentDidMount() {
-		fetch('http://localhost:5000/Cities')
+		fetch('http://localhost:5000/cities')
 		.then(response=> response.json())
 		.then(cities => {
 			this.props.getCities(cities)

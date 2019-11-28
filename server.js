@@ -2,23 +2,21 @@ require('dotenv').config()
 var express = require('express');
 var app = express();
 var router = express.Router();
-const authRoutes= require('./routes/auth-routes')
 var mongoose = require('mongoose');
 var bcrypt = require("bcryptjs");
-
+var cors = require('cors');
+var bodyParser = require('body-parser');
+const jwt = require("jsonwebtoken");
+const passport = require('passport');
+//Models
 var citiesModel = require('./models/City');
 var citiesMod = citiesModel;
 var itineraryModel = require('./models/Itinerary');
 var itineraryMod = itineraryModel;
 var usersModel = require('./models/Users');
 var usersMod = usersModel;
-
-var cors = require('cors');
-var bodyParser = require('body-parser');
-const jwt = require("jsonwebtoken");
-const passport = require('passport');
-
-var port = process.env.PORT || 5000;
+//Environment data
+var port = process.env.PORT;
 var mongodb = process.env.MONGO_URI;
 var mongoKey = process.env.MONGO_SECRET_OR_KEY;
 
@@ -35,6 +33,7 @@ mongoose.connect(mongodb,
 //----------
 //MIDDLEWARE
 //----------
+
 app.use(cors());
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -42,6 +41,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 const passportGoogle = require("./config/passportGoogle");
 app.use('/', router);
+const authRoutes= require('./routes/auth-routes')
 app.use('/auth', authRoutes);
 
 //Logs requests beforehand
@@ -57,7 +57,7 @@ router.get('/', (req, res) => {
 	res.send("Home")
 })
 
-router.get('/Cities', (req, res) =>{
+router.get('/cities', (req, res) =>{
 	citiesMod.find().then(data => {
 		res.json(data)
 	})
@@ -66,7 +66,7 @@ router.get('/Cities', (req, res) =>{
 	});
 })
 
-router.get('/Cities/:city_id', cors(),(req, res) => {
+router.get('/cities/:city_id', cors(),(req, res) => {
 	itineraryMod.find({"id": req.params.city_id})
 	.then(data => {
 		res.json(data)
@@ -76,19 +76,19 @@ router.get('/Cities/:city_id', cors(),(req, res) => {
 	});
 });
 
-router.get('/CreateAccount', (req, res) => {
-	res.send('createAccount page')
+router.get('/createAccount', (req, res) => {
+	res.send('CreateAccount page')
 });
 
-router.get('/MYtinerary', (req, res) => {
-  res.send('mytinerary page');
+router.get('/mytinerary', (req, res) => {
+  res.send('MYtinerary page');
 });
 
 //-------------
 //POST REQUESTS
 //-------------
 
-router.post("/CreateAccount", urlencodedParser, (req, res) => {
+router.post("/createAccount", urlencodedParser, (req, res) => {
 	usersMod.findOne({email:req.body.email}).then(user=>{
 		if (user) {
 			return res.status(400).json({ email: "Email already exists" })
@@ -113,7 +113,7 @@ router.post("/CreateAccount", urlencodedParser, (req, res) => {
 	});
 });	
 
-router.post("/Login", urlencodedParser, (req, res) => {
+router.post("/login", urlencodedParser, (req, res) => {
 	const email = req.body.email;
 	const password = req.body.password;
 	// Find user by email

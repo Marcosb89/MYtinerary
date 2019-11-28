@@ -10,7 +10,7 @@ passport.use(
   new GoogleStrategy({
     clientID: googleId,
     clientSecret: googleSecret,
-    callbackURL: '/Auth/Google/Redirect'
+    callbackURL: '/auth/google/redirect'
     },
   function(accessToken, refreshToken, profile, cb){
     console.log(profile);

@@ -6,15 +6,15 @@ import { Link } from 'react-router-dom';
 
 class LogIn extends React.Component {
 
-   onSignIn = () => {
-    window.location.href = 'http://localhost:5000/Auth/Google/Redirect'
+   onLogIn = () => {
+		window.location.href = 'http://localhost:5000/auth/google'		
    }
 
 	render(){
 		return(
 		<div className='mainAccount'>
 				<Toolbar />
-        <form className='accountForm' method='POST' action="/Login">
+        <form className='accountForm' method='POST' action="/login">
 					<h1>Login</h1>
 					<div className='accountFormField'>
 						<label htmlFor='email'>Email</label>
@@ -31,7 +31,7 @@ class LogIn extends React.Component {
 				<br/>
 				<Link style={{fontSize:'4vw',}} to='/'>Forgot your username or password?</Link>
 				<p>Social media login</p>
-				<button href='/Auth/Google' onClick={this.onSignIn}>Google</button>
+				<button onClick={this.onLogIn}>Google</button>
 			</div>
 		)
 	}

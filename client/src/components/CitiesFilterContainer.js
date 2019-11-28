@@ -12,7 +12,7 @@ export default class CitiesFilterContainer extends Component {
   }
 
   componentDidMount = async () => {
-    await fetch('http://localhost:5000/Cities')
+    await fetch('http://localhost:5000/cities')
     .then(response=> response.json())
     .then(cities => {
       this.state.cities = cities
@@ -42,7 +42,7 @@ export default class CitiesFilterContainer extends Component {
         <li style={{backgroundImage: "url(" + imgCity + ")", 
           backgroundSize: 'cover', backgroundPosition: 'center', height: '150px'}}
           key={city.name}>
-        <Link to={'/Cities/' + city.name}><p>{city.name}, {city.country}</p></Link>
+        <Link to={'/cities/' + city.name}><p>{city.name}, {city.country}</p></Link>
         </li>)}
       );
     return(

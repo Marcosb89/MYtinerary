@@ -1,23 +1,30 @@
+require('dotenv').config()
 var express = require('express');
+var app = express();
 var router = express.Router();
+const authRoutes= require('./routes/auth-routes')
 var mongoose = require('mongoose');
 var bcrypt = require("bcryptjs");
-var citiesModel = require('./City');
+
+var citiesModel = require('./models/City');
 var citiesMod = citiesModel;
-var itineraryModel = require('./Itinerary');
+var itineraryModel = require('./models/Itinerary');
 var itineraryMod = itineraryModel;
-var usersModel = require('./Users');
+var usersModel = require('./models/Users');
 var usersMod = usersModel;
-var app = express();
+
 var cors = require('cors');
-var port = process.env.PORT || 5000;
 var bodyParser = require('body-parser');
-const keys = require("./config/keys");
 const jwt = require("jsonwebtoken");
 const passport = require('passport');
 
+var port = process.env.PORT || 5000;
+var mongodb = process.env.MONGO_URI;
+var mongoKey = process.env.MONGO_SECRET_OR_KEY;
+
+
 //Access to MongoDB
-mongoose.connect('mongodb+srv://Marcosb89:m&bM1989B89@mytinerarycluster-4ovxm.mongodb.net/MYtineraryDB?retryWrites=true&w=majority', 
+mongoose.connect(mongodb, 
 { useNewUrlParser: true }, (err) => {
 	if (!err){
 		console.log('MongoDB connection succeeded.')
@@ -28,12 +35,14 @@ mongoose.connect('mongodb+srv://Marcosb89:m&bM1989B89@mytinerarycluster-4ovxm.mo
 //----------
 //MIDDLEWARE
 //----------
+app.use(cors());
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(passport.initialize());
 require("./config/passport")(passport);
-app.use(cors());
+const passportGoogle = require("./config/passportGoogle");
 app.use('/', router);
+app.use('/auth', authRoutes);
 
 //Logs requests beforehand
 router.use(function(req, res, next) {
@@ -55,7 +64,6 @@ router.get('/Cities', (req, res) =>{
 	.catch(err => {
 		console.log(err)
 	});
-	
 })
 
 router.get('/Cities/:city_id', cors(),(req, res) => {
@@ -69,23 +77,11 @@ router.get('/Cities/:city_id', cors(),(req, res) => {
 });
 
 router.get('/CreateAccount', (req, res) => {
-	res.send('CreateAccount page');
-  });
-  
-router.get('/Login', (req, res) => {
-	res.send('Login page');
-});
-
-router.get('/api/users/google', (req, res) => {
-	res.send('LoginGoogle page');
-});
-
-router.get('/api/users/google/redirect', (req, res) => {
-	res.send('LoginGoogleRedirect page');
+	res.send('createAccount page')
 });
 
 router.get('/MYtinerary', (req, res) => {
-  res.send('MYtinerary page');
+  res.send('mytinerary page');
 });
 
 //-------------
@@ -137,7 +133,7 @@ router.post("/Login", urlencodedParser, (req, res) => {
         };
 // Sign token
 				jwt.sign(payload,
-					keys.secretOrKey, 
+					mongoKey, 
 					{expiresIn: 31556926},
 					(err, token) => {
           res.json({

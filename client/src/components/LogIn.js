@@ -7,13 +7,8 @@ import { Link } from 'react-router-dom';
 class LogIn extends React.Component {
 
    onSignIn = () => {
-     window.location.href = 'http://localhost:3000/auth/google/callback'
-    // var profile = googleUser.getBasicProfile();
-    // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    // console.log('Name: ' + profile.getName());
-    // console.log('Image URL: ' + profile.getImageUrl());
-    // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-    }
+    window.location.href = 'http://localhost:5000/Auth/Google/Redirect'
+   }
 
 	render(){
 		return(
@@ -35,9 +30,8 @@ class LogIn extends React.Component {
 				</form>
 				<br/>
 				<Link style={{fontSize:'4vw',}} to='/'>Forgot your username or password?</Link>
-				<div class="g-signin2" data-onsuccess="onSignIn">
-					<button /*href='/api/users/google'*/ onClick={this.onSignIn}>Google</button>
-				</div>
+				<p>Social media login</p>
+				<button href='/Auth/Google' onClick={this.onSignIn}>Google</button>
 			</div>
 		)
 	}

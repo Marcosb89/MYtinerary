@@ -23,7 +23,7 @@ const routing = (
 				<Route exact path='/Cities' component={Cities} />
 				<Route exact path='/Cities/:city_id' component={Itinerary} />
 				<Route exact path='/CreateAccount' component={CreateAccount} /> 
-				<Route exact path='/Login' component={Login} />  
+				<Route exact path='/Login' component={Login} />
 				<Route component={PageError} />
 			</Switch>
 		</Router>

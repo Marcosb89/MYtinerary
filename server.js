@@ -8,20 +8,20 @@ var cors = require('cors');
 var bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-//Models
+//---Models---
 var citiesModel = require('./models/City');
 var citiesMod = citiesModel;
 var itineraryModel = require('./models/Itinerary');
 var itineraryMod = itineraryModel;
 var usersModel = require('./models/Users');
 var usersMod = usersModel;
-//Environment data
+//---Environment data---
 var port = process.env.PORT;
 var mongodb = process.env.MONGO_URI;
 var mongoKey = process.env.MONGO_SECRET_OR_KEY;
 
 //Access to MongoDB
-mongoose.connect(mongodb, { useNewUrlParser: true }, err => {
+mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true }, err => {
   if (!err) {
     console.log('MongoDB connection succeeded.');
   } else console.log(err);
@@ -98,18 +98,16 @@ router.post('/createAccount', urlencodedParser, (req, res) => {
         password: req.body.password,
         urlPic: req.body.urlPic
       });
-      //STARTS BCRYPT	------------------------
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) throw err;
           newUser.password = hash;
           newUser
             .save()
-            .then(user => res.json(user))
+            .then(res.redirect('/'))
             .catch(err => console.log(err));
         });
       });
-      //ENDS BCRYPT---------------------------
     }
   });
 });
@@ -126,13 +124,11 @@ router.post('/login', urlencodedParser, (req, res) => {
     // Check password
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
-        // User matched - Create JWT Payload
         const payload = {
           id: user.id,
           email: user.email,
           urlPic: user.urlPic
         };
-        // Sign token
         jwt.sign(payload, mongoKey, { expiresIn: 31556926 }, (err, token) => {
           res.json({
             success: true,

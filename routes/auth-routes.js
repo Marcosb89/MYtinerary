@@ -1,26 +1,31 @@
 const router = require('express').Router();
 const passport = require('passport');
-var usersModel = require('../models/Users');
-var usersMod = usersModel;
 var bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+//---Models---
+var usersModel = require('../models/Users');
+var usersMod = usersModel;
+//---Environment data---
 require('dotenv').config();
+const host = process.env.HOST + process.env.CLIENT_PORT;
 
-
-const host = process.env.HOST + process.env.PORT_CLIENT;
-
-//LOGIN
+//---------
+//--LOGIN--
+//---------
 router.get('/login', (req, res) => {
   res.send('Login page');
 });
 
-//LOGOUT
+//----------
+//--LOGOUT--
+//----------
 router.get('/logout', (req, res) => {
   res.send('Logout page');
 });
 
+//-----------
 //GOOGLE AUTH
+//-----------
 router.get(
   '/google',
   passport.authenticate('google', { scope: ['email', 'profile'] })
@@ -33,9 +38,8 @@ router.get('/google/redirect',
     var userEmail = req.user._json.email;
     var userPicture = req.user._json.picture;
     var userPass = req.user._json.sub;
-    console.log(req.user._json)
     usersMod.findOne({ email: userEmail }).then(user => {
-      //Checks for existing user, if not it creates one
+      //Checks for existing user, if there is not, creates one
       if (!user) {
         let newUser = new usersMod({
           email: userEmail,
@@ -48,7 +52,6 @@ router.get('/google/redirect',
             newUser.password = hash;
             newUser
               .save()
-              //.then(user => res.json(user))
               .catch(err => console.log(err));
           });
         });
@@ -75,7 +78,7 @@ router.get('/google/redirect',
           });
         })
       }
-    })
+    })    
     res.redirect(host + '/');
   }
 );

@@ -18,7 +18,6 @@ var usersMod = usersModel;
 //Environment data
 var port = process.env.PORT;
 var mongodb = process.env.MONGO_URI;
-// console.log(port, 'pepe');
 var mongoKey = process.env.MONGO_SECRET_OR_KEY;
 
 //Access to MongoDB

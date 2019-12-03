@@ -1,4 +1,9 @@
-export const getItineraryData = (city_id) =>  (dispatch) => {
+//---Environment data---
+/*require('dotenv').config();
+const host = process.env.HOST;
+const port = process.env.PORT;*/
+
+export const getItineraryData = (city_id) =>  (dispatch) => {	
 	fetch('http://localhost:5000/cities/' + city_id)
 	.then(response=> response.json())
 	.then(data => {

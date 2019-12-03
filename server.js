@@ -1,4 +1,3 @@
-require('dotenv').config();
 var express = require('express');
 var app = express();
 var router = express.Router();
@@ -16,6 +15,7 @@ var itineraryMod = itineraryModel;
 var usersModel = require('./models/Users');
 var usersMod = usersModel;
 //---Environment data---
+require('dotenv').config();
 var port = process.env.PORT;
 var mongodb = process.env.MONGO_URI;
 var mongoKey = process.env.MONGO_SECRET_OR_KEY;
@@ -76,6 +76,17 @@ router.get('/cities/:city_id', cors(), (req, res) => {
     });
 });
 
+router.get('/users', (req, res) => {
+  usersMod
+    .find()
+    .then(data => {
+      res.json(data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 router.get('/createAccount', (req, res) => {
   res.send('CreateAccount page');
 });
@@ -87,6 +98,20 @@ router.get('/mytinerary', (req, res) => {
 //-------------
 //POST REQUESTS
 //-------------
+router.post('/protected', verifyToken, (req, res) => {
+  jwt.verify(req.token, mongoKey, ( err, authData) =>{
+    if(err){
+      res.sendStatus(403);
+    }
+    else{
+      res.json({
+        message: 'Success',
+        authDAta
+      })
+    }
+  })
+})
+  
 
 router.post('/createAccount', urlencodedParser, (req, res) => {
   usersMod.findOne({ email: req.body.email }).then(user => {
@@ -98,6 +123,13 @@ router.post('/createAccount', urlencodedParser, (req, res) => {
         password: req.body.password,
         urlPic: req.body.urlPic
       });
+      jwt.sign(newUser, mongoKey, { expiresIn: 31556926 }, (err, token) => {
+        res.json({
+          success: true,
+          token: 'Bearer ' + token
+        });
+      });
+      localStorage.setItem('Bearer', token)
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) throw err;
@@ -143,6 +175,24 @@ router.post('/login', urlencodedParser, (req, res) => {
     });
   });
 });
+
+
+//FORMAT OF TOKEN
+//Authorization: Bearer <access_token>
+
+//VERIFY TOKEN
+function verifyToken(req, res, next){
+  //Get auth header value
+  const bearerHeader = req.headers['authorization'];
+  if(typeof bearerHeader !== undefined){
+    const bearer = bearerHeader.split(' ');
+    const bearerToken = bearer[1];
+    req.token = bearerToken;
+    next();
+  }else{
+    res.sendStatus(403);
+  }
+}
 
 //-------------
 //Port listener

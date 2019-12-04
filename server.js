@@ -118,28 +118,33 @@ router.post('/createAccount', urlencodedParser, (req, res) => {
     if (user) {
       return res.status(400).json({ email: 'Email already exists' });
     } else {
-      let newUser = new usersMod({
+      const newUser = new usersMod({
         email: req.body.email,
         password: req.body.password,
         urlPic: req.body.urlPic
-      });
-      jwt.sign(newUser, mongoKey, { expiresIn: 31556926 }, (err, token) => {
-        res.json({
-          success: true,
-          token: 'Bearer ' + token
-        });
-      });
-      localStorage.setItem('Bearer', token)
+      });      
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
           newUser.password = hash;
-          newUser
-            .save()
-            .then(res.redirect('/'))
+          newUser.save()
+            //.then(res.redirect('/'))
+            .then(user => {
+              jwt.sign({id: user.id}, mongoKey, { expiresIn: 31556926 }, (err, token) => {
+                if(err) throw err;
+                res.json({token, 
+                  user:{
+                    id: user.id,
+                    urlPic: user.urlPic,
+                    email: user.email
+                  }
+                });
+              });
+            })
             .catch(err => console.log(err));
         });
       });
+      //localStorage.setItem('token', token)
+      
     }
   });
 });

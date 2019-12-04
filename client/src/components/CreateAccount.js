@@ -1,7 +1,5 @@
 import React from 'react';
 import Toolbar from './Toolbar';
-import { connect } from 'react-redux';
-import { userPostFetch } from '../actions/userPostFetchAction';
 
 function ValidationMessage(props) {
   if (!props.valid) {
@@ -109,16 +107,11 @@ class CreateAccount extends React.Component {
 		})
 	}
 
-	//HANDLE SUBMIT
-	handleSubmit = event => {
-		this.props.userPostFetch(this.state)		
-	}
-
 	render(){
 		return (
 			<div className='mainAccount'>
 				<Toolbar />
-        <form className='accountForm' id='accountForm' method='POST' action="/createAccount" onSubmit={this.handleSubmit}>
+        <form className='accountForm' id='accountForm' method='POST' action="/createAccount">
 					<h1>CreateAccount</h1>
 					<div className='accountFormField'>
 						<label htmlFor='email'>Email</label>
@@ -157,8 +150,4 @@ class CreateAccount extends React.Component {
 	}
 }
 
-const mapDispatchToProps = dispatch => ({
-  userPostFetch: userInfo => dispatch(userPostFetch(userInfo))
-})
-
-export default connect(null, mapDispatchToProps)(CreateAccount);
+export default CreateAccount;

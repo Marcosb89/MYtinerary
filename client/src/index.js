@@ -24,6 +24,7 @@ const routing = (
 				<Route exact path='/cities/:city_id' component={Itinerary} />
 				<Route exact path='/createAccount' component={CreateAccount} /> 
 				<Route exact path='/login' component={Login} />
+				<Route exact path='/logout' component={Login} />
 				<Route component={PageError} />
 			</Switch>
 		</Router>

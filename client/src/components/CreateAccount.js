@@ -1,5 +1,6 @@
 import React from 'react';
 import Toolbar from './Toolbar';
+import axios from 'axios'
 
 function ValidationMessage(props) {
   if (!props.valid) {
@@ -18,6 +19,7 @@ class CreateAccount extends React.Component {
 		errorMsg: {}
 	}
 
+	
 	//-------------
 	//----EMAIL----
 	//-------------
@@ -107,11 +109,24 @@ class CreateAccount extends React.Component {
 		})
 	}
 
+	sendForm = async (e) => {
+		e.preventDefault()
+	 const { email, password, urlPic } = this.state
+	 let response = await axios.post('http://localhost:5000/createAccount', {email, password, urlPic})
+	 let token = response.data.token
+	 localStorage.setItem('token', token)
+	 this.props.history.push('/')
+	}
+
+	leeFoto = (e) => {
+		this.setState({urlPic: e.target.value})
+	}
+
 	render(){
 		return (
 			<div className='mainAccount'>
 				<Toolbar />
-        <form className='accountForm' id='accountForm' method='POST' action="/createAccount">
+        <form className='accountForm' id='accountForm'>
 					<h1>CreateAccount</h1>
 					<div className='accountFormField'>
 						<label htmlFor='email'>Email</label>
@@ -139,10 +154,10 @@ class CreateAccount extends React.Component {
 					</div>
 					<div className='accountFormField'>
 						<label htmlFor='urlPic'>Profile picture url</label>
-						<input type="text" name='urlPic' required/>
+						<input type="text" onChange={this.leeFoto} name='urlPic' required/>
 					</div>
 					<div className='accountFormField'>
-						<button type='submit' id='submit' disabled={!this.state.formValid}>Submit</button>
+						<button type='submit' onClick={this.sendForm} id='submit' disabled={!this.state.formValid}>Submit</button>
 					</div>
 				</form>
 			</div>

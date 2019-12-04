@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+
 var router = express.Router();
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
@@ -31,15 +32,17 @@ mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true }, e
 //MIDDLEWARE
 //----------
 
+app.use(express.json())
 app.use(cors());
-var jsonParser = bodyParser.json();
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+// var jsonParser = bodyParser.json();
+// var urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(passport.initialize());
 require('./config/passport')(passport);
 const passportGoogle = require('./config/passportGoogle');
 const authRoutes = require('./routes/auth-routes');
 app.use('/auth', authRoutes);
 app.use('/', router);
+
 
 //Logs requests beforehand
 router.use(function(req, res, next) {
@@ -111,9 +114,8 @@ router.post('/protected', verifyToken, (req, res) => {
     }
   })
 })
-  
 
-router.post('/createAccount', urlencodedParser, (req, res) => {
+router.post('/createAccount', (req, res) => {
   usersMod.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ email: 'Email already exists' });
@@ -127,9 +129,8 @@ router.post('/createAccount', urlencodedParser, (req, res) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           newUser.password = hash;
           newUser.save()
-            //.then(res.redirect('/'))
             .then(user => {
-              jwt.sign({id: user.id}, mongoKey, { expiresIn: 31556926 }, (err, token) => {
+              jwt.sign({newUser}, mongoKey, { expiresIn: 31556926 }, (err, token) => {
                 if(err) throw err;
                 res.json({token, 
                   user:{
@@ -143,13 +144,11 @@ router.post('/createAccount', urlencodedParser, (req, res) => {
             .catch(err => console.log(err));
         });
       });
-      //localStorage.setItem('token', token)
-      
     }
   });
 });
 
-router.post('/login', urlencodedParser, (req, res) => {
+router.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   // Find user by email
@@ -169,7 +168,7 @@ router.post('/login', urlencodedParser, (req, res) => {
         jwt.sign(payload, mongoKey, { expiresIn: 31556926 }, (err, token) => {
           res.json({
             success: true,
-            token: 'Bearer ' + token
+            token: token
           });
         });
       } else {
@@ -180,6 +179,15 @@ router.post('/login', urlencodedParser, (req, res) => {
     });
   });
 });
+
+router.post('/logout',(req, res) => {
+  if(!localStorage){
+    this.props.history.push('/login')
+  }else{
+    localStorage.removeItem(token)
+    this.props.history.push('/login')
+  }
+})
 
 
 //FORMAT OF TOKEN

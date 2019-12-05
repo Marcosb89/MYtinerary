@@ -1,6 +1,9 @@
 import React from 'react';
 import Toolbar from './Toolbar';
 import axios from 'axios'
+import { setUserData } from '../actions/authActions';
+import { connect } from 'react-redux';
+
 
 function ValidationMessage(props) {
   if (!props.valid) {
@@ -117,17 +120,20 @@ class CreateAccount extends React.Component {
 	sendForm = async (e) => {
 		e.preventDefault()
 	 const { email, password, urlPic } = this.state
-	 let response = await axios.post('http://localhost:5000/createAccount', {email, password, urlPic})
-	 let token = response.data.token
-	 localStorage.setItem('token', token)
-	 this.props.history.push('/')
+	 let response = await axios.post('http://localhost:5000/users', {email, password, urlPic})
+	 let token = response.data.token;
+	 this.props.setUserData(token);
+	 this.props.setUserData(email);
+	 this.props.setUserData(urlPic);
+	 localStorage.setItem('token', token);
+	 this.props.history.push('/');
 	}
 
 	render(){
 		return (
 			<div className='mainAccount'>
 				<Toolbar />
-        <form className='accountForm' id='accountForm'>
+        <form className='accountForm'>
 					<h1>CreateAccount</h1>
 					<div className='accountFormField'>
 						<label htmlFor='email'>Email</label>
@@ -167,4 +173,22 @@ class CreateAccount extends React.Component {
 	}
 }
 
-export default CreateAccount;
+//-----
+//REDUX
+//-----
+
+/*const mapStateToProps = state => {
+  return {
+		// stateForComponent: state.StateFromStore
+  };
+};*/
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setUserData: data => {
+      return dispatch(setUserData(data));
+    }
+  };
+};
+
+export default connect(null, mapDispatchToProps)(CreateAccount);

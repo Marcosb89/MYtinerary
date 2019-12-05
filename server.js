@@ -79,17 +79,6 @@ router.get('/cities/:city_id', cors(), (req, res) => {
     });
 });
 
-router.get('/users', (req, res) => {
-  usersMod
-    .find()
-    .then(data => {
-      res.json(data);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
-
 router.get('/createAccount', (req, res) => {
   res.send('CreateAccount page');
 });
@@ -115,7 +104,7 @@ router.post('/protected', verifyToken, (req, res) => {
   })
 })
 
-router.post('/createAccount', (req, res) => {
+router.post('/users', (req, res) => {
   usersMod.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ email: 'Email already exists' });
@@ -148,7 +137,7 @@ router.post('/createAccount', (req, res) => {
   });
 });
 
-router.post('/login', (req, res) => {
+router.post('/users/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   // Find user by email
@@ -168,7 +157,9 @@ router.post('/login', (req, res) => {
         jwt.sign(payload, mongoKey, { expiresIn: 31556926 }, (err, token) => {
           res.json({
             success: true,
-            token: token
+            token: token,
+            email: payload.email,
+            urlPic: payload.urlPic
           });
         });
       } else {
@@ -179,16 +170,6 @@ router.post('/login', (req, res) => {
     });
   });
 });
-
-router.post('/logout',(req, res) => {
-  if(!localStorage){
-    this.props.history.push('/login')
-  }else{
-    localStorage.removeItem(token)
-    this.props.history.push('/login')
-  }
-})
-
 
 //FORMAT OF TOKEN
 //Authorization: Bearer <access_token>

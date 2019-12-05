@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { connect } from 'react-redux';
 
 const Log = () => {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
-	const toggle = () => setDropdownOpen(prevState => !prevState);
-	if(!localStorage){			
+	const toggle = () => setDropdownOpen(prevState => !prevState);	
+	if(window.localStorage.length === 0){
 		return(
 			<div>
 				<Dropdown isOpen={dropdownOpen} toggle={toggle}>
@@ -17,22 +18,30 @@ const Log = () => {
 							<Link to="/createAccount" className="link">Create account</Link>
 						</DropdownItem>
 						<DropdownItem>
-							<Link to="/login" className="link">Login</Link>
+							<Link to="/login" className="link" >Login</Link>
 						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
 			</div>
 		)
 	}else{
+		const logOut = (e) => {
+			e.preventDefault()
+			 localStorage.removeItem('token')
+			 alert("You've logged out");
+		}	
+		console.log(this.props);
+		
+		const profilePic = this.props.urlPic;
 		return(
 			<div>
 				<Dropdown isOpen={dropdownOpen} toggle={toggle}>
 					<DropdownToggle color='none'>
-							<img id='profile' src={require("../assets/images/profile.jpg")} alt="profile" />
+							<img id='profile' src={require({profilePic})} alt="profile" />
 					</DropdownToggle>
 					<DropdownMenu>
 						<DropdownItem>
-							<Link to="/logout" className="link">Logout</Link>
+							<Link to="/login" className="link" onClick={logOut.bind(this)}>Logout</Link>
 						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
@@ -89,4 +98,23 @@ class Toolbar extends React.Component {
 	}
 }
 
-export default Toolbar;
+//-----
+//REDUX
+//-----
+
+const mapStateToProps = state => {
+  return {
+	 token: state.auth.user.token,
+	 urlPic: state.auth.user.urlPic
+  };
+};
+
+/*const mapDispatchToProps = dispatch => {
+  return {
+		setToken: data => {
+			dispatch(setToken(data))
+		}
+  }
+}*/
+
+export default connect(mapStateToProps, null)(Toolbar);

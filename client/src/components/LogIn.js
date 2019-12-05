@@ -1,39 +1,66 @@
 import React from 'react';
 import Toolbar from './Toolbar';
 import { Link } from 'react-router-dom';
+import axios from 'axios'
+import { connect } from 'react-redux';
+import { setUserData } from '../actions/authActions';
+
+
 require('dotenv').config();
 
 
 
-class LogIn extends React.Component {
+class Login extends React.Component {
+	state = {
+		email:'',
+		password: ''
+	}
 
-   onLogIn = () => {
-		 //const url = process.env.HOST + process.env.PORT;
-		 window.location.href =  'http://localhost:5000/auth/google'
+	sendFormIn = async (e) => {
+		e.preventDefault()
+	 const { email, password} = this.state
+	 let response = await axios.post('http://localhost:5000/users/login', {email, password})	 
+	 this.props.setUserData(response);
+	 localStorage.setItem('token', this.props.token);
+	 this.props.history.push('/');
+	}
+
+  onLogIn = () => {
+		//const url = process.env.HOST + process.env.PORT;
+		window.location.href =  'http://localhost:5000/auth/google'
 		//http://localhost:5000/auth/google
    }
 
-	 onLogOut = () => {
+	onLogOut = () => {
 		window.location.href = "https://mail.google.com/mail/u/0/?logout&hl=en";
 	}
 	
-
+	updateEmail = (email) => {
+    this.setState({email})
+	}
+	
+	updatePassword = (password) => {
+    this.setState({password})
+	}
+	
 	render(){
 		return(
-		<div className='mainAccount'>
+			<div className='mainAccount'>
 				<Toolbar />
-        <form className='accountForm' method='POST' action="/login">
+				<form className='accountForm'>
 					<h1>Login</h1>
 					<div className='accountFormField'>
 						<label htmlFor='email'>Email</label>
-						<input type="text" name='email' required/>
+						<input type="text" name='email' value={this.state.email} 
+						onChange={(e) => this.updateEmail(e.target.value)} required/>
 					</div>
 					<div className='accountFormField'>
 						<label htmlFor='password'>Password</label>
-						<input type="password" name='password' id='password' required/>
+						<input type="password" name='password' id='password' value={this.state.password} 
+						onChange={(e) => this.updatePassword(e.target.value)} required/>
 					</div>
 					<div className='accountFormField'>
-						<button	type='submit' id='submit'>Login</button>
+						<button	type='submit' id='submit' onClick={this.sendFormIn}>Login</button>
 					</div>
 				</form>
 				<br/>
@@ -46,4 +73,22 @@ class LogIn extends React.Component {
 	}
 }
 
-export default LogIn;
+//-----
+//REDUX
+//-----
+
+/*const mapStateToProps = state => {
+  return {
+	 token: state.token
+  };
+};*/
+
+const mapDispatchToProps = dispatch => {
+  return {
+		setUserData: data => {
+			dispatch(setUserData(data))
+		}
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Login);

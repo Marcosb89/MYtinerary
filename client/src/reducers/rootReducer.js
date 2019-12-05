@@ -7,4 +7,3 @@ export default combineReducers({
 	itinerary: itineraryReducer,
 });
 
-//localStorage.setItem('token', token)

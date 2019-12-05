@@ -15,6 +15,7 @@ class CreateAccount extends React.Component {
 		emailConf:'', emailConfValid: false,
 		password: '', passwordValid: false,
 		passwordConf: '', passwordConfValid: false,
+		urlPic: '',
 		formValid: false,
 		errorMsg: {}
 	}
@@ -99,6 +100,10 @@ class CreateAccount extends React.Component {
     this.setState({passwordConfValid, errorMsg}, this.validateForm);
 	}
 
+	updateUrlPic = (urlPic) => {
+		this.setState({urlPic})
+	}
+
 	//-------------
 	//VALIDATE FORM
 	//-------------
@@ -116,10 +121,6 @@ class CreateAccount extends React.Component {
 	 let token = response.data.token
 	 localStorage.setItem('token', token)
 	 this.props.history.push('/')
-	}
-
-	leeFoto = (e) => {
-		this.setState({urlPic: e.target.value})
 	}
 
 	render(){
@@ -154,7 +155,8 @@ class CreateAccount extends React.Component {
 					</div>
 					<div className='accountFormField'>
 						<label htmlFor='urlPic'>Profile picture url</label>
-						<input type="text" onChange={this.leeFoto} name='urlPic' required/>
+						<input type="text" name='urlPic' id='urlPic' value={this.state.urlPic} 
+						onChange={(e) => this.updateUrlPic(e.target.value)} required/>
 					</div>
 					<div className='accountFormField'>
 						<button type='submit' onClick={this.sendForm} id='submit' disabled={!this.state.formValid}>Submit</button>

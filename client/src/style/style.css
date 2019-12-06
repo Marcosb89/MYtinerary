@@ -29,6 +29,15 @@
 	max-width: 25px;
 }
 
+#profileImg{
+	max-width: 30px;
+  border-radius: 50%;
+}
+
+#profilePic{
+	border-radius: 50%;
+}
+
 #bar1{
 	width: 25px;
 	border: 2px solid black;
@@ -119,7 +128,6 @@
 }
 
 #pHash{
-	width: 70% !important;
 	padding-left: 4vw;
 }
 
@@ -327,21 +335,34 @@ span.carousel-control-next-icon {
 .parentBox{
 	display: inline-block;
 	border: 2px #aaa solid;
+	background-color: #eee;
 	margin-bottom: 2%;
 	width: 95%;
+}
+
+.parentBox h2, .parentBox p{
+	background-color: #eee;
+}
+
+.headerBox{
+	display: inline-block;
+	margin-bottom: 25px;
+	background-color: #eee;
 }
 
 .userBox{
 	float: left;
 	width: 22%;
 	height: 14%;
-	border-right: 2px #aaa solid;
+	/* border-right: 2px #aaa solid; */
 	background-color: #eee;
 	margin: 0px;
 	margin-right: 2%;
 }
 
 .activityBox{
+	width: 75%;
+	float: right;
 	background-color: #eee;
 }
 
@@ -359,25 +380,32 @@ span.carousel-control-next-icon {
 	float: left;
 	background-color: #eee;
 	font-size: 3.25vw;
-	margin: 0;
+	margin-bottom: 2vw;
 	padding-left: 6vw;
-	width: 22%;
 }
 
 .userBox img{
 	float: left;
 	width: 100%;
-	/* max-height: 50vh; */
+	margin: 1vh;
 	object-fit: cover;
 	overflow: hidden;
 }
 
 .userBox p{
-	float: none;
 	font-size: 2.25vw !important;
-	margin: 0px !important;
+	margin: 0 0 0 5vw;
+
 	background-color: #eee;
 	text-align: center;
+}
+
+.collapse, .card-body, .show{
+	background-color: #eee;
+}
+
+.card-body{
+	border: none;
 }
 
 .btn{
@@ -388,7 +416,7 @@ span.carousel-control-next-icon {
 }
 
 .btn-primary{
-	background-color: #aaa;
+	background-color: #888;
 	box-shadow: none;
 	border: none;
 	font-size: 3vw !important;
@@ -396,7 +424,7 @@ span.carousel-control-next-icon {
 }
 
 .btn-primary:hover{
-	background-color: #aaa;
+	background-color: #888;
 	border: none !important;
 	box-shadow: none !important;
 

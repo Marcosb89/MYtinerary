@@ -117,7 +117,7 @@ class CreateAccount extends React.Component {
 		})
 	}
 
-	sendForm = async (e) => {
+	/*sendForm = async (e) => {
 		e.preventDefault()
 	 const { email, password, urlPic } = this.state
 	 let response = await axios.post('http://localhost:5000/users', {email, password, urlPic})
@@ -125,6 +125,17 @@ class CreateAccount extends React.Component {
 	 this.props.setUserData(token);
 	 localStorage.setItem('token', token);
 	 this.props.history.push('/');
+	}*/
+
+	sendForm = async (e) => {
+		e.preventDefault()
+		const userData = {
+			email: this.state.email,
+			password: this.state.password,
+			google: false
+		}
+		this.props.loginUser(userData)
+		this.props.history.push('/');
 	}
 
 	render(){

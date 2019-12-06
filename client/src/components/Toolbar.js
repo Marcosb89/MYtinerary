@@ -3,10 +3,7 @@ import React, { useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 const Log = () => {
-	//const profilePic = "'" + localStorage.getItem('urlPic') + "'";
-	//const imgProfile = require("'" + localStorage.getItem('urlPic') + "'");
-	//console.log(imgProfile);
-	
+	const imgProfile = localStorage.getItem('urlPic') ;
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const toggle = () => setDropdownOpen(prevState => !prevState);	
 	if(window.localStorage.length === 0){
@@ -30,21 +27,25 @@ const Log = () => {
 	}else{
 		const logOut = (e) => {
 			e.preventDefault()
-			 localStorage.removeItem('token')
-			 localStorage.removeItem('urlPic')
-			 localStorage.removeItem('email')
-
-			 alert("You've logged out");
+			if (localStorage.getItem('google') == 'false'){
+				//localStorage.removeItem('token')
+				localStorage.removeItem('urlPic')
+				localStorage.removeItem('email')
+				localStorage.removeItem('google')
+				alert("You've logged out");
+			}else{
+				window.location.href = "https://mail.google.com/mail/u/0/?logout&hl=en";
+			}
 		}	
 		return(
 			<div>
 				<Dropdown isOpen={dropdownOpen} toggle={toggle}>
 					<DropdownToggle color='none'>
-						{/* <img id='profile' src={imgProfile} alt="profile" /> */}
+						<img id='profileImg' src={imgProfile} alt="profile" />
 					</DropdownToggle>
 					<DropdownMenu>
 						<DropdownItem>
-							<Link to="/login" className="link" onClick={logOut.bind(this)}>Logout</Link>
+							<Link to="/" onClick={logOut.bind(this)}>Logout</Link>
 						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
@@ -63,9 +64,7 @@ const User = (props) => {
 
 const Menu = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   const toggle = () => setDropdownOpen(prevState => !prevState);
-
   return (
 		<div className='Menu'>
 			<Dropdown isOpen={dropdownOpen} toggle={toggle}>

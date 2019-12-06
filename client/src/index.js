@@ -8,6 +8,7 @@ import Cities from './components/Cities';
 import Itinerary from './components/Itinerary';
 import CreateAccount from './components/CreateAccount';
 import Login from './components/LogIn';
+import GoogleSign from './components/GoogleSign';
 import PageError from './components/PageError';
 import * as serviceWorker from './serviceWorker';
 import "./style/style.css";
@@ -25,6 +26,7 @@ const routing = (
 				<Route exact path='/createAccount' component={CreateAccount} /> 
 				<Route exact path='/login' component={Login} />
 				<Route exact path='/logout' component={Login} />
+				<Route exact path='/googleSign/:token' component={GoogleSign} />
 				<Route component={PageError} />
 			</Switch>
 		</Router>

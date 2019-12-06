@@ -5,7 +5,6 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var cors = require('cors');
-var bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 //---Models---
@@ -34,8 +33,6 @@ mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true }, e
 
 app.use(express.json())
 app.use(cors());
-// var jsonParser = bodyParser.json();
-// var urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(passport.initialize());
 require('./config/passport')(passport);
 const passportGoogle = require('./config/passportGoogle');
@@ -112,7 +109,8 @@ router.post('/users', (req, res) => {
       const newUser = new usersMod({
         email: req.body.email,
         password: req.body.password,
-        urlPic: req.body.urlPic
+        urlPic: req.body.urlPic,
+        google: false
       });      
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -125,7 +123,8 @@ router.post('/users', (req, res) => {
                   user:{
                     id: user.id,
                     urlPic: user.urlPic,
-                    email: user.email
+                    email: user.email,
+                    google: user.google
                   }
                 });
               });
@@ -152,13 +151,15 @@ router.post('/users/login', (req, res) => {
         const payload = {
           id: user.id,
           email: user.email,
-          urlPic: user.urlPic
+          urlPic: user.urlPic,
+          google: false
         };
         jwt.sign(payload, mongoKey, { expiresIn: 31556926 }, (err, token) => {
           res.json({
             token: token,
             email: payload.email,
-            urlPic: payload.urlPic
+            urlPic: payload.urlPic,
+            google: payload.google
           });
         });
       } else {

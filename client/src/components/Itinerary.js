@@ -95,18 +95,20 @@ class Itinerary extends React.Component {
 
       return (
         <div className='parentBox' key={title}>
-          <div className='userBox'>
-            <img id='profilePic' src={imgProfile} alt={user} />
-            <p>{user}</p>
-          </div>
-          <div className='activityBox'>
-            <h1>{title}</h1>
-            <p>Likes: {rating}</p>
-            <p>{duration} Hours</p>
-            <p>${price}</p>
-            <br />
-            <p id='pHash'>{hashtags}</p>
-            <br />
+          <div className = 'headerBox'>
+            <div className='userBox'>
+              <img id='profilePic' src={imgProfile} alt={user} />
+              <p>{user}</p>
+            </div>
+            <div className='activityBox'>
+              <h1>{title}</h1>
+              <p>Likes: {rating}</p>
+              <p>{duration} Hours</p>
+              <p>${price}</p>
+              <br />
+              <p id='pHash'>{hashtags}</p>
+              <br />
+            </div>
           </div>
           <ItineraryButton objectActivity={activityData} />
         </div>

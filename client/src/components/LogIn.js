@@ -19,14 +19,11 @@ class Login extends React.Component {
 		e.preventDefault()
 	 const userData = { 
 		 email: this.state.email, 
-		 password: this.state.password
+		 password: this.state.password,
+		 google: false
 		}
 		this.props.loginUser(userData)
 		this.props.history.push('/');
-	 /*let response = await axios.post('http://localhost:5000/users/login', {email, password})	 
-	 this.props.setUserData(response);
-	 localStorage.setItem('token', this.props.token);
-	 this.props.history.push('/');*/
 	}
 
   onLogIn = () => {
@@ -35,9 +32,9 @@ class Login extends React.Component {
 		//http://localhost:5000/auth/google
    }
 
-	onLogOut = () => {
-		window.location.href = "https://mail.google.com/mail/u/0/?logout&hl=en";
-	}
+	// onLogOut = () => {
+	// 	window.location.href = "https://mail.google.com/mail/u/0/?logout&hl=en";
+	// }
 	
 	updateEmail = (email) => {
     this.setState({email})

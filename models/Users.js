@@ -6,6 +6,7 @@ var userSchema = new Schema({
     email: String,
     password: String,
     urlPic: String,
+    google: Boolean
 },
 {
     collection: 'users'

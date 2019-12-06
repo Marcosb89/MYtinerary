@@ -156,7 +156,6 @@ router.post('/users/login', (req, res) => {
         };
         jwt.sign(payload, mongoKey, { expiresIn: 31556926 }, (err, token) => {
           res.json({
-            success: true,
             token: token,
             email: payload.email,
             urlPic: payload.urlPic

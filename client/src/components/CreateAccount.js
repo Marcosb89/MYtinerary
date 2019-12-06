@@ -123,8 +123,6 @@ class CreateAccount extends React.Component {
 	 let response = await axios.post('http://localhost:5000/users', {email, password, urlPic})
 	 let token = response.data.token;
 	 this.props.setUserData(token);
-	 this.props.setUserData(email);
-	 this.props.setUserData(urlPic);
 	 localStorage.setItem('token', token);
 	 this.props.history.push('/');
 	}

@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { connect } from 'react-redux';
 
 const Log = () => {
+	//const profilePic = "'" + localStorage.getItem('urlPic') + "'";
+	//const imgProfile = require("'" + localStorage.getItem('urlPic') + "'");
+	//console.log(imgProfile);
+	
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const toggle = () => setDropdownOpen(prevState => !prevState);	
 	if(window.localStorage.length === 0){
@@ -28,16 +31,16 @@ const Log = () => {
 		const logOut = (e) => {
 			e.preventDefault()
 			 localStorage.removeItem('token')
+			 localStorage.removeItem('urlPic')
+			 localStorage.removeItem('email')
+
 			 alert("You've logged out");
 		}	
-		console.log(this.props);
-		
-		const profilePic = this.props.urlPic;
 		return(
 			<div>
 				<Dropdown isOpen={dropdownOpen} toggle={toggle}>
 					<DropdownToggle color='none'>
-							<img id='profile' src={require({profilePic})} alt="profile" />
+						{/* <img id='profile' src={imgProfile} alt="profile" /> */}
 					</DropdownToggle>
 					<DropdownMenu>
 						<DropdownItem>
@@ -53,7 +56,7 @@ const Log = () => {
 const User = (props) => {
   return (
 		<div className='User'>
-			<Log />
+			<Log/>
 		</div>
   );
 }
@@ -98,23 +101,4 @@ class Toolbar extends React.Component {
 	}
 }
 
-//-----
-//REDUX
-//-----
-
-const mapStateToProps = state => {
-  return {
-	 token: state.auth.user.token,
-	 urlPic: state.auth.user.urlPic
-  };
-};
-
-/*const mapDispatchToProps = dispatch => {
-  return {
-		setToken: data => {
-			dispatch(setToken(data))
-		}
-  }
-}*/
-
-export default connect(mapStateToProps, null)(Toolbar);
+export default Toolbar

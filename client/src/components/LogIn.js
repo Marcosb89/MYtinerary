@@ -1,9 +1,8 @@
 import React from 'react';
 import Toolbar from './Toolbar';
 import { Link } from 'react-router-dom';
-import axios from 'axios'
 import { connect } from 'react-redux';
-import { setUserData } from '../actions/authActions';
+import { loginUser } from '../actions/authActions';
 
 
 require('dotenv').config();
@@ -18,11 +17,16 @@ class Login extends React.Component {
 
 	sendFormIn = async (e) => {
 		e.preventDefault()
-	 const { email, password} = this.state
-	 let response = await axios.post('http://localhost:5000/users/login', {email, password})	 
+	 const userData = { 
+		 email: this.state.email, 
+		 password: this.state.password
+		}
+		this.props.loginUser(userData)
+		this.props.history.push('/');
+	 /*let response = await axios.post('http://localhost:5000/users/login', {email, password})	 
 	 this.props.setUserData(response);
 	 localStorage.setItem('token', this.props.token);
-	 this.props.history.push('/');
+	 this.props.history.push('/');*/
 	}
 
   onLogIn = () => {
@@ -83,12 +87,4 @@ class Login extends React.Component {
   };
 };*/
 
-const mapDispatchToProps = dispatch => {
-  return {
-		setUserData: data => {
-			dispatch(setUserData(data))
-		}
-  }
-}
-
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(null, {loginUser})(Login);

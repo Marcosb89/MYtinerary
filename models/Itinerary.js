@@ -12,7 +12,8 @@ var ItinerarySchema = new Schema({
     duration: Number,
     price: Number,
     hashtags: Array,
-    activities: Array
+    activities: Array,
+    comments: Array
 },
 {
     collection: 'itinerary'

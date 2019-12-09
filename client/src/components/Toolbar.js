@@ -27,7 +27,7 @@ const Log = () => {
 	}else{
 		const logOut = (e) => {
 			e.preventDefault()
-			if (localStorage.getItem('google') == 'false'){
+			if (localStorage.getItem('google') === 'false'){
 				//localStorage.removeItem('token')
 				localStorage.removeItem('urlPic')
 				localStorage.removeItem('email')

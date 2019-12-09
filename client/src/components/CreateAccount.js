@@ -1,6 +1,5 @@
 import React from 'react';
 import Toolbar from './Toolbar';
-import axios from 'axios'
 import { setUserData } from '../actions/authActions';
 import { connect } from 'react-redux';
 

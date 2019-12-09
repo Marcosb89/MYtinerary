@@ -110,6 +110,8 @@ router.post('/users', (req, res) => {
         email: req.body.email,
         password: req.body.password,
         urlPic: req.body.urlPic,
+        isLogged: true,
+        likes: [],
         google: false
       });      
       bcrypt.genSalt(10, (err, salt) => {
@@ -124,6 +126,8 @@ router.post('/users', (req, res) => {
                     id: user.id,
                     urlPic: user.urlPic,
                     email: user.email,
+                    isLogged: user.isLogged,
+                    likes: user.likes,
                     google: user.google
                   }
                 });
@@ -152,6 +156,8 @@ router.post('/users/login', (req, res) => {
           id: user.id,
           email: user.email,
           urlPic: user.urlPic,
+          isLogged: user.isLogged,
+          likes: user.likes,
           google: false
         };
         jwt.sign(payload, mongoKey, { expiresIn: 31556926 }, (err, token) => {
@@ -159,6 +165,8 @@ router.post('/users/login', (req, res) => {
             token: token,
             email: payload.email,
             urlPic: payload.urlPic,
+            isLogged: payload.isLogged,
+            likes: payload.likes,
             google: payload.google
           });
         });
@@ -170,6 +178,10 @@ router.post('/users/login', (req, res) => {
     });
   });
 });
+
+router.post('/users/login/like', (req, res) => {
+  db.usersMod.save
+})
 
 //FORMAT OF TOKEN
 //Authorization: Bearer <access_token>

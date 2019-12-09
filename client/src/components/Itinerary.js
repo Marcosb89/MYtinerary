@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import Toolbar from './Toolbar';
 import { connect } from 'react-redux';
 import { getItineraryData } from '../actions/itineraryActions';
@@ -92,6 +93,18 @@ class Itinerary extends React.Component {
       let price = activity.price;
       let hashtags = activity.hashtags.join(' ');
       let activityData = activity.activities;
+    
+
+      /*const onLike = () => {
+        const user = localStorage.getItem('email')
+        usersMod.findOne({ user }).then(user => {
+          if(!user){
+            alert('You must be logged in')
+          }else{
+            axios.post('http://localhost:5000/users/login/like')
+          }
+        }
+      }*/
 
       return (
         <div className='parentBox' key={title}>
@@ -101,6 +114,10 @@ class Itinerary extends React.Component {
               <p>{user}</p>
             </div>
             <div className='activityBox'>
+              {/* if()
+              <a onClick={onLike}>
+                <img id='like' src={require('../assets/images/heart.png')}/>
+              </a> */}
               <h1>{title}</h1>
               <p>Likes: {rating}</p>
               <p>{duration} Hours</p>

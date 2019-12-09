@@ -38,6 +38,13 @@
 	border-radius: 50%;
 }
 
+#like{
+	float: right;
+	margin: 2px 5px 0 0;
+	max-width: 7vw;
+	background-color: #eee;
+}
+
 #bar1{
 	width: 25px;
 	border: 2px solid black;

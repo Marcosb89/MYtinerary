@@ -6,6 +6,8 @@ var userSchema = new Schema({
     email: String,
     password: String,
     urlPic: String,
+    isLogged: Boolean,
+    likes: Array,
     google: Boolean
 },
 {

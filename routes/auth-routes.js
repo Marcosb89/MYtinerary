@@ -26,13 +26,12 @@ router.get('/logout', (req, res) => {
 //-----------
 //GOOGLE AUTH
 //-----------
-router.get(
-  '/google',
+router.get('/google',
   passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 
 router.get('/google/redirect',
-  passport.authenticate('google', { failureRedirect: '/login', session: false }),
+  passport.authenticate('google', { failureRedirect: 'http://localhost:3000/', session: false }),
   function (req, res) {
     var mongoKey = process.env.MONGO_SECRET_OR_KEY;
     usersMod.findOne({ email: req.user._json.email }).then(user => {
@@ -42,6 +41,7 @@ router.get('/google/redirect',
           email: req.user._json.email,
           password: req.user._json.sub,
           urlPic: req.user._json.picture,
+          likes: [],
           google: true
         });
         bcrypt.genSalt(10, (err, salt) => {
@@ -53,6 +53,7 @@ router.get('/google/redirect',
               const payload = {
                 email: newUser.email,
                 urlPic: newUser.urlPic,
+                likes: newUser.likes,
                 google: newUser.google
               }
               jwt.sign(payload, mongoKey, { expiresIn: 31556926 }, (err, token) => {
@@ -77,6 +78,7 @@ router.get('/google/redirect',
             id: user.id,
             email: user.email,
             urlPic: user.urlPic,
+            likes: user.likes,
             google: user.google
           };
           jwt.sign(payload, mongoKey, { expiresIn: 31556926 }, (err, token) => {

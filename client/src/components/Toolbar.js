@@ -2,15 +2,14 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { connect } from 'react-redux';
+import jwt_decode from 'jwt-decode';
 var empty = require('is-empty');
 
 
 class Toolbar extends React.Component {
 	render(){
-		console.log(this.props.auth);
 		const User = () => {
 			const Log = () => {
-				const imgProfile = localStorage.getItem('urlPic') ;
 				const [dropdownOpen, setDropdownOpen] = useState(false);
 				const toggle = () => setDropdownOpen(prevState => !prevState);	
 				if(empty(this.props.auth.user)){
@@ -32,9 +31,15 @@ class Toolbar extends React.Component {
 						</div>
 					)
 				}else{
+					const userDecoded = jwt_decode(this.props.auth.user);
+					const imgProfile = userDecoded.urlPic;
+
 					const logOut = (e) => {
 						e.preventDefault()
-						if (this.props.auth.user.google === false){
+						localStorage.setItem('persist:root', '')
+							alert("You've logged out");
+							window.location.reload();
+						/*if (userDecoded.google === false){
 							//set props to empty and refresh to apply changes
 							localStorage.setItem('persist:root', '')
 							alert("You've logged out");
@@ -42,7 +47,7 @@ class Toolbar extends React.Component {
 						}else{
 							alert("Google Logout");
 							//window.location.href = "https://mail.google.com/mail/u/0/?logout&hl=en";
-						}
+						}*/
 					}	
 					return(
 						<div>

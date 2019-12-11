@@ -1,5 +1,3 @@
-//const isEmpty = require('is-empty');
-
 const initialState = {
     user: {}
 }

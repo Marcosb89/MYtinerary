@@ -153,19 +153,16 @@ router.post('/users/login', (req, res) => {
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         const payload = {
-          id: user.id,
           email: user.email,
           urlPic: user.urlPic,
-          isLogged: user.isLogged,
           likes: user.likes,
-          google: false
+          google: user.google
         };
         jwt.sign(payload, mongoKey, { expiresIn: 31556926 }, (err, token) => {
           res.json({
             token: token,
             email: payload.email,
             urlPic: payload.urlPic,
-            isLogged: payload.isLogged,
             likes: payload.likes,
             google: payload.google
           });

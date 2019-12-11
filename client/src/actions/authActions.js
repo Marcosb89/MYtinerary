@@ -1,5 +1,5 @@
 import axios from 'axios';
-import jwt_decode from 'jwt-decode';
+//import jwt_decode from 'jwt-decode';
 
 export const loginUser = userData => dispatch => {
   axios.post('http://localhost:5000/users/login', userData)
@@ -7,11 +7,12 @@ export const loginUser = userData => dispatch => {
       const {token} = res.data;
       //localStorage.setItem('token', token)
       //setAuthToken(token);
-      const decoded = jwt_decode(token);
+      /*const decoded = jwt_decode(token);*/
       // localStorage.setItem('urlPic', decoded.urlPic)
       // localStorage.setItem('email', decoded.email)
       // localStorage.setItem('google', decoded.google)
-      dispatch(setUserData(decoded));
+      /*dispatch(setUserData(decoded));*/
+      dispatch(setUserData(token))
   })/*.catch(err => {
     dispatch({
       type: GET_ERRORS,
@@ -20,18 +21,18 @@ export const loginUser = userData => dispatch => {
   })*/
 }
 
-export const setUserData = decoded => {
+export const setUserData = token => {
   return ({
     type: 'SET_USER_DATA',
-    payload: decoded
+    payload: token
   })
 }
 
 export const googleSign = (token) => dispatch => {
   //setAuthToken(token);
-  const decoded = jwt_decode(token);
+  //const {decoded} = jwt_decode(token);
   // localStorage.setItem('urlPic', decoded.urlPic)
   // localStorage.setItem('email', decoded.email)
   // localStorage.setItem('google', decoded.google)
-  dispatch(setUserData(decoded));
+  dispatch(setUserData(token));
 }

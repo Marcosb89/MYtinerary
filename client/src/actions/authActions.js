@@ -8,9 +8,9 @@ export const loginUser = userData => dispatch => {
       //localStorage.setItem('token', token)
       //setAuthToken(token);
       const decoded = jwt_decode(token);
-      localStorage.setItem('urlPic', decoded.urlPic)
-      localStorage.setItem('email', decoded.email)
-      localStorage.setItem('google', decoded.google)
+      // localStorage.setItem('urlPic', decoded.urlPic)
+      // localStorage.setItem('email', decoded.email)
+      // localStorage.setItem('google', decoded.google)
       dispatch(setUserData(decoded));
   })/*.catch(err => {
     dispatch({
@@ -30,8 +30,8 @@ export const setUserData = decoded => {
 export const googleSign = (token) => dispatch => {
   //setAuthToken(token);
   const decoded = jwt_decode(token);
-  localStorage.setItem('urlPic', decoded.urlPic)
-  localStorage.setItem('email', decoded.email)
-  localStorage.setItem('google', decoded.google)
+  // localStorage.setItem('urlPic', decoded.urlPic)
+  // localStorage.setItem('email', decoded.email)
+  // localStorage.setItem('google', decoded.google)
   dispatch(setUserData(decoded));
 }

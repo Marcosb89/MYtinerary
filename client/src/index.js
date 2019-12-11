@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import App from './components/App';
 import MYtinerary from './components/MYtinerary';
 import Cities from './components/Cities';
@@ -12,25 +12,28 @@ import GoogleSign from './components/GoogleSign';
 import PageError from './components/PageError';
 import * as serviceWorker from './serviceWorker';
 import "./style/style.css";
-import store from './store'
-import { Provider } from 'react-redux'
+import {store, persistor} from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Provider } from 'react-redux';
 
 const routing = (
 	<Provider store={store}>
-		<Router>
-			<Switch>
-				<Route exact path='/' component={App} />
-				<Route exact path='/mytinerary' component={MYtinerary} /> 
-				<Route exact path='/cities' component={Cities} />
-				<Route exact path='/cities/:city_id' component={Itinerary} />
-				<Route exact path='/createAccount' component={CreateAccount} /> 
-				<Route exact path='/login' component={Login} />
-				<Route exact path='/logout' component={Login} />
-				<Route exact path='/googleSign/:token' component={GoogleSign} />
-				<Route component={PageError} />
-			</Switch>
-		</Router>
-		</Provider>
+		<PersistGate loading={null} persistor={persistor}>
+			<Router>
+				<Switch>
+					<Route exact path='/' component={App} />
+					<Route exact path='/mytinerary' component={MYtinerary} /> 
+					<Route exact path='/cities' component={Cities} />
+					<Route exact path='/cities/:city_id' component={Itinerary} />
+					<Route exact path='/createAccount' component={CreateAccount} /> 
+					<Route exact path='/login' component={Login} />
+					<Route exact path='/logout' component={Login} />
+					<Route exact path='/googleSign/:token' component={GoogleSign} />
+					<Route component={PageError} />
+				</Switch>
+			</Router>
+		</PersistGate>
+	</Provider>
 )
 
 ReactDOM.render(routing, document.getElementById('root'));

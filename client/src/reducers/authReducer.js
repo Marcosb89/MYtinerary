@@ -9,7 +9,7 @@ const authReducer = (state = initialState, action) => {
     case 'SET_USER_DATA':
       return{
         ...state,
-          user: action.payload
+        user: action.payload
       }
     default:
       return state;

@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { connect } from 'react-redux';
-import jwt_decode from 'jwt-decode';
 var empty = require('is-empty');
 
 
@@ -31,14 +30,13 @@ class Toolbar extends React.Component {
 						</div>
 					)
 				}else{
-					const userDecoded = jwt_decode(this.props.auth.user);
-					const imgProfile = userDecoded.urlPic;
+					const imgProfile = this.props.auth.user.urlPic;
 
 					const logOut = (e) => {
 						e.preventDefault()
 						localStorage.setItem('persist:root', '')
 							alert("You've logged out");
-							window.location.reload();
+							window.location.pathname = '/'
 						/*if (userDecoded.google === false){
 							//set props to empty and refresh to apply changes
 							localStorage.setItem('persist:root', '')

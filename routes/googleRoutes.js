@@ -1,27 +1,19 @@
 const router = require('express').Router();
 const passport = require('passport');
-var bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
 //---Models---
-var usersModel = require('../models/Users');
-var usersMod = usersModel;
+const usersModel = require('../models/Users');
+const user = usersModel;
+
 //---Environment data---
 require('dotenv').config();
 const host = process.env.HOST + process.env.CLIENT_PORT;
+const mongoKey = process.env.MONGO_SECRET_OR_KEY;
 
-//---------
-//--LOGIN--
-//---------
-router.get('/login', (req, res) => {
-  res.send('Login page');
-});
+require('../config/passportGoogle');
 
-//----------
-//--LOGOUT--
-//----------
-router.get('/logout', (req, res) => {
-  res.send('Logout page');
-});
 
 //-----------
 //GOOGLE AUTH
@@ -34,7 +26,7 @@ router.get('/google/redirect',
   passport.authenticate('google', { failureRedirect: 'http://localhost:3000/', session: false }),
   function (req, res) {
     var mongoKey = process.env.MONGO_SECRET_OR_KEY;
-    usersMod.findOne({ email: req.user._json.email }).then(user => {
+    user.findOne({ email: req.user._json.email }).then(user => {
       //Checks for existing user, if there is not, creates one
       if (!user) {
         const newUser = new usersMod({
@@ -75,7 +67,7 @@ router.get('/google/redirect',
             user.password = req.user._json.sub;
           }
           const payload = {
-            id: user.id,
+            id: user._id,
             email: user.email,
             urlPic: user.urlPic,
             likes: user.likes,

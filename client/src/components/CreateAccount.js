@@ -1,7 +1,11 @@
 import React from 'react';
 import Toolbar from './Toolbar';
+import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 import { setUserData } from '../actions/authActions';
 import { connect } from 'react-redux';
+import { loginUser } from '../actions/authActions';
+
 
 
 function ValidationMessage(props) {
@@ -116,26 +120,26 @@ class CreateAccount extends React.Component {
 		})
 	}
 
-	/*sendForm = async (e) => {
+	sendForm = async (e) => {
 		e.preventDefault()
 	 const { email, password, urlPic } = this.state
-	 let response = await axios.post('http://localhost:5000/users', {email, password, urlPic})
-	 let token = response.data.token;
-	 this.props.setUserData(token);
-	 localStorage.setItem('token', token);
+	 let response = await axios.post('http://localhost:5000/users/register', {email, password, urlPic})
+	 let userData = jwt_decode(response.data.token);
+	 this.props.setUserData(userData);
 	 this.props.history.push('/');
-	}*/
+	}
 
-	sendForm = async (e) => {
+	/*sendForm = async (e) => {
 		e.preventDefault()
 		const userData = {
 			email: this.state.email,
 			password: this.state.password,
+			urlPic: this.state.urlPic,
 			google: false
 		}
 		this.props.loginUser(userData)
 		this.props.history.push('/');
-	}
+	}*/
 
 	render(){
 		return (
@@ -194,7 +198,10 @@ class CreateAccount extends React.Component {
 const mapDispatchToProps = dispatch => {
   return {
     setUserData: data => {
-      return dispatch(setUserData(data));
+			return dispatch(setUserData(data))
+		},
+		loginUser: data => {
+			return dispatch(loginUser(data));			
     }
   };
 };

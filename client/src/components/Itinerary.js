@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 //import axios from 'axios';
 import Toolbar from './Toolbar';
+import LikeBtn from './LikeBtn';
 import { connect } from 'react-redux';
 import { getItineraryData } from '../actions/itineraryActions';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
@@ -86,6 +87,7 @@ class Itinerary extends React.Component {
     let box = this.props.itineraryData.itinerary.map(activity => {
       let urlImg = activity.profilePic;
       let imgProfile = require('../assets/images/' + urlImg);
+      let id = activity._id;
       let title = activity.title;
       let user = activity.user;
       let rating = activity.rating;
@@ -93,19 +95,6 @@ class Itinerary extends React.Component {
       let price = activity.price;
       let hashtags = activity.hashtags.join(' ');
       let activityData = activity.activities;
-    
-
-      /*const onLike = () => {
-        const user = localStorage.getItem('email')
-        usersMod.findOne({ user }).then(user => {
-          if(!user){
-            alert('You must be logged in')
-          }else{
-            axios.post('http://localhost:5000/users/login/like')
-          }
-        }
-      }*/
-
       return (
         <div className='parentBox' key={title}>
           <div className = 'headerBox'>
@@ -113,11 +102,8 @@ class Itinerary extends React.Component {
               <img id='profilePic' src={imgProfile} alt={user} />
               <p>{user}</p>
             </div>
-            <div className='activityBox'>
-              {/* if()
-              <a onClick={onLike}>
-                <img id='like' src={require('../assets/images/heart.png')}/>
-              </a> */}
+            <div className='activityBox'>         
+              {this.props.auth.user.id ? <LikeBtn activityId = {id}/> : <div></div>}
               <h1>{title}</h1>
               <p>Likes: {rating}</p>
               <p>{duration} Hours</p>
@@ -133,6 +119,7 @@ class Itinerary extends React.Component {
     });
     return <div className='activitiesBox'>{box}</div>;
   }
+
   render() {
     return (
       <div>
@@ -158,7 +145,8 @@ class Itinerary extends React.Component {
 //-----
 const mapStateToProps = state => {
   return {
-    itineraryData: state.itinerary
+    itineraryData: state.itinerary,
+    auth: state.auth
   };
 };
 

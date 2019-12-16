@@ -16,33 +16,29 @@ class LikeBtn extends React.Component {
   }  
 
   //getDerivedStateFromProps(props){   
-  componentWillReceiveProps(props) {    
-    if(!props.likes.liked){
+  componentWillReceiveProps() {
+    /*if(!props.likes.liked){
       this.props.getLikes(props.auth.user.id)
-    }
-    if(props.likes.liked.data.indexOf(props.activityId) !== -1) {
+    }*/
+    if(this.props.auth.user.likes.indexOf(this.props.activityId) !== -1) {
       this.setState({isLiked: true})
     } else {
       this.setState({isLiked: false})
     }
   }
 
-  componentDidMount(){  
-    this.props.getLikes(this.props.auth.user.id);
-    if(this.props.likes.liked.data){
-      if(this.props.likes.liked.data.indexOf(this.props.activityId) !== -1) {
+  componentDidMount(){      
+    //this.props.getLikes(this.props.auth.user.id);
+    if(this.props.auth.user.likes){
+      if(this.props.auth.user.likes.indexOf(this.props.activityId) !== -1) {
         this.setState({isLiked: true})
       } else {
         this.setState({isLiked: false})
       }
-    }        
-  }
-
-  componentDidUpdate(prevProps, prevState) {    
-    var userLikes = this.props.likes.liked.data;
-    if (userLikes !== this.props.auth.user.likes) {
-      this.props.setUserLikes(userLikes)            
-    }
+    }else{
+      console.log('The user has no likes');  
+      this.setState({isLiked: false})
+    }      
   }
 
   async handleClick(){
@@ -51,9 +47,10 @@ class LikeBtn extends React.Component {
     await axios.put(`http://localhost:5000/users/likes/postlike/${userId}/${itId}`)
     .then((res) => {
       console.log(res.data)
-       this.props.getLikes(userId)
-      this.setState({ isLiked: !this.state.isLiked });
-      //this.props.handler(this.props.itinerary.itinerary[this.props.index].rating);
+      this.props.itinerary.itinerary[this.props.index].rating = res.data.rating;
+      this.props.setUserLikes(res.data.likes)
+      this.setState({ isLiked: !this.state.isLiked })
+      console.log(this.props)
       //deshabilitar boton 
     })
     
@@ -78,7 +75,8 @@ class LikeBtn extends React.Component {
       <button id='btnLike' onClick={this.handleClick.bind(this)}>
          {(this.state.isLiked === false) ? 
          <img id='like' src={require('../assets/images/heart.png')} alt='like'/> : 
-         <img id='like' src={require('../assets/images/heartFull.png')} alt='like'/>}      
+         <img id='like' src={require('../assets/images/heartFull.png')} alt='like'/>}  
+         {/* <p>Likes: {this.props.itinerary.itinerary[this.props.index].rating}</p> */}   
       </button>
     )
   }

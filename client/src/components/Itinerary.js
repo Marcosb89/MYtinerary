@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-//import axios from 'axios';
 import Toolbar from './Toolbar';
 import LikeBtn from './LikeBtn';
 import { connect } from 'react-redux';
@@ -63,15 +62,6 @@ const ItineraryButton = props => {
 class Itinerary extends React.Component {
   // constructor(props){
   //   super(props)
-  //   this.state = {rating: this.handler}
-  //   this.handler = this.handler.bind(this)
-  // }
-
-  // handler(rating){
-  //   this.setState({
-  //     rating: rating
-  //   })
-  // }
 
   async componentDidMount() {
     const {
@@ -96,6 +86,7 @@ class Itinerary extends React.Component {
   }
 
   activitiesBox() {
+    //console.log(this.props.itineraryData.itinerary);
     let box = this.props.itineraryData.itinerary.map((activity, index) => {
       let activityIndex = index;
       let urlImg = activity.profilePic;
@@ -104,7 +95,6 @@ class Itinerary extends React.Component {
       let title = activity.title;
       let user = activity.user;
       let rating = activity.rating;
-      //let rating = this.state.rating;
       let duration = activity.duration;
       let price = activity.price;
       let hashtags = activity.hashtags.join(' ');
@@ -118,7 +108,6 @@ class Itinerary extends React.Component {
             </div>
             <div className='activityBox'>         
               {this.props.auth.user.id ? <LikeBtn index = {activityIndex}
-                /*handler = {this.handler}*/
                 activityId={id} /> : <div></div>}
               <h1>{title}</h1>
               <p>Likes: {rating}</p>
@@ -136,7 +125,7 @@ class Itinerary extends React.Component {
     return <div className='activitiesBox'>{box}</div>;
   }
 
-  render() {
+  render() {    
     return (
       <div>
         <Toolbar />

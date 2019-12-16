@@ -14,7 +14,7 @@ const authReducer = (state = initialState, action) => {
       ...state,
       user: {
         ...state.user, 
-        likes: action.payload
+        likes: [...action.payload]
       }
     }
     default:

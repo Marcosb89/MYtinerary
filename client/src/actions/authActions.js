@@ -5,8 +5,6 @@ export const loginUser = userData => dispatch => {
   axios.post('http://localhost:5000/users/login', userData)
   .then(res => {
       const {token} = res.data;
-      //localStorage.setItem('token', token)
-      //setAuthToken(token);
       const decoded = jwt_decode(token);
       dispatch(setUserData(decoded));
   })/*.catch(err => {
@@ -17,15 +15,21 @@ export const loginUser = userData => dispatch => {
   })*/
 }
 
-export const setUserData = decoded => {
+export const setUserData = token => {
   return ({
     type: 'SET_USER_DATA',
-    payload: decoded
+    payload: token
+  })
+}
+
+export const setUserLikes = data => {
+  return ({
+    type: 'SET_USER_LIKES',
+    payload: data
   })
 }
 
 export const googleSign = (token) => dispatch => {
-  //setAuthToken(token);
-  const decoded = jwt_decode(token);
+  const {decoded} = jwt_decode(token);
   dispatch(setUserData(decoded));
 }

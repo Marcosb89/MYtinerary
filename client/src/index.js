@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import App from './components/App';
 import MYtinerary from './components/MYtinerary';
 import Cities from './components/Cities';
@@ -12,9 +12,9 @@ import GoogleSign from './components/GoogleSign';
 import PageError from './components/PageError';
 import * as serviceWorker from './serviceWorker';
 import "./style/style.css";
-import { Provider } from 'react-redux'
-import { store, persistor } from './store';
+import {store, persistor} from './store';
 import { PersistGate } from 'redux-persist/integration/react';
+import { Provider } from 'react-redux';
 
 const routing = (
 	<Provider store={store}>

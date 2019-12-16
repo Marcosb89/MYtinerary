@@ -39,9 +39,14 @@
 }
 
 #like{
-	float: right;
 	margin: 2px 5px 0 0;
 	max-width: 7vw;
+	background-color: #eee;
+}
+
+#btnLike{
+	float: right;
+	border: none;
 	background-color: #eee;
 }
 

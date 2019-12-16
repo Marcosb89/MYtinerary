@@ -1,7 +1,7 @@
 import { createStore, compose, applyMiddleware } from 'redux';
-import rootReducer from './reducers/rootReducer';
+import combineReducers from './reducers/rootReducer';
 import thunk from 'redux-thunk';
-import { persistStore, persistReducer } from 'redux-persist';
+import {persistStore, persistReducer} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 const persistConfig = {
@@ -9,15 +9,11 @@ const persistConfig = {
   storage,
   blacklist: ['cities', 'itinerary']
 };
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
+const persistedReducer = persistReducer(persistConfig, combineReducers);
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(
-  persistedReducer,
-  composeEnhancer(applyMiddleware(thunk)))
+const store = createStore(persistedReducer, composeEnhancer(applyMiddleware(thunk)))
 
 const persistor = persistStore(store);
 
-export { store, persistor };
+export {store, persistor};

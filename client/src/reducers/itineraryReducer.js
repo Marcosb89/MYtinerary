@@ -8,11 +8,11 @@ const itineraryReducer = (state = initialState, action) => {
 			return{
 					...state,
           itinerary: action.payload
-
-      }
+      }     
     default:
 			return state;
 	}
 }
 
 export default itineraryReducer;
+

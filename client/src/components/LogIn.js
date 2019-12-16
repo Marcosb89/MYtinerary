@@ -15,7 +15,7 @@ class Login extends React.Component {
 		password: ''
 	}
 
-	sendFormIn = async (e) => {
+	logIn = async (e) => {
 		e.preventDefault()
 	 const userData = { 
 		 email: this.state.email, 
@@ -26,13 +26,13 @@ class Login extends React.Component {
 		this.props.history.push('/');
 	}
 
-  onLogIn = () => {
+  googleLogIn = () => {
 		//const url = process.env.HOST + process.env.PORT;
 		window.location.href =  'http://localhost:5000/auth/google'
 		//http://localhost:5000/auth/google
    }
 
-	// onLogOut = () => {
+	// googleLogOut = () => {
 	// 	window.location.href = "https://mail.google.com/mail/u/0/?logout&hl=en";
 	// }
 	
@@ -61,14 +61,14 @@ class Login extends React.Component {
 						onChange={(e) => this.updatePassword(e.target.value)} required/>
 					</div>
 					<div className='accountFormField'>
-						<button	type='submit' id='submit' onClick={this.sendFormIn}>Login</button>
+						<button	type='submit' id='submit' onClick={this.logIn}>Login</button>
 					</div>
 				</form>
 				<br/>
 				<Link style={{fontSize:'4vw',}} to='/'>Forgot your username or password?</Link>
 				<p>Social media login</p>
-				<button onClick={this.onLogIn}>Google In</button>
-				<button onClick={this.onLogOut}>Google Out</button>
+				<button onClick={this.googleLogIn}>Google In</button>
+				<button onClick={this.googleLogOut}>Google Out</button>
 			</div>
 		)
 	}

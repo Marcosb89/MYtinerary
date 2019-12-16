@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { connect } from 'react-redux';
+ 
 
 const Log = () => {
 	const imgProfile = localStorage.getItem('urlPic') ;
 	const [dropdownOpen, setDropdownOpen] = useState(false);
-	const toggle = () => setDropdownOpen(prevState => !prevState);	
-	if(window.localStorage.length === 0){
+	const toggle = () => setDropdownOpen(prevState => !prevState);
+	console.log(this.props.auth);
+	if (1>0){
 		return(
 			<div>
 				<Dropdown isOpen={dropdownOpen} toggle={toggle}>
@@ -28,10 +31,7 @@ const Log = () => {
 		const logOut = (e) => {
 			e.preventDefault()
 			if (localStorage.getItem('google') === 'false'){
-				//localStorage.removeItem('token')
-				localStorage.removeItem('urlPic')
-				localStorage.removeItem('email')
-				localStorage.removeItem('google')
+				localStorage.removeItem('persist:root')
 				alert("You've logged out");
 			}else{
 				window.location.href = "https://mail.google.com/mail/u/0/?logout&hl=en";
@@ -91,13 +91,25 @@ const Menu = (props) => {
 
 class Toolbar extends React.Component {
 	render(){
+		data=this.props.
+		console.log(this);	
 		return (
 			<div className='Toolbar'>
-				<User />
+				<User userData={}/>
 				<Menu />
 			</div>
 		)
 	}
 }
 
-export default Toolbar
+//-----
+//REDUX
+//-----
+
+const mapStateToProps = state => {
+  return {
+	 auth: state.auth
+  };
+};
+
+export default connect(mapStateToProps, null)(Toolbar, Log)

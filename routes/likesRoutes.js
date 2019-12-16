@@ -42,6 +42,7 @@ router.put('/likes/postlike/:userId/:itineraryId',cors(), function(req,res){
             } else {
               userMod.findByIdAndUpdate(req.params.userId, 
                 {$pull: {likes: {$in: req.params.itineraryId}}}, function(err){
+                  
                 if(err){
                   return res.status(400).send('Error3');
                 }

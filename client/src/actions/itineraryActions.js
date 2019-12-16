@@ -13,3 +13,10 @@ export const getItineraryData = (city_id) =>  (dispatch) => {
 		})
 	})	
 }
+
+export const setItineraryLikes = data => {
+  return ({
+    type: 'SET_ITINERARY_LIKES',
+    payload: data
+  })
+}

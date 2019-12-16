@@ -22,6 +22,13 @@ export const setUserData = token => {
   })
 }
 
+export const setUserLikes = data => {
+  return ({
+    type: 'SET_USER_LIKES',
+    payload: data
+  })
+}
+
 export const googleSign = (token) => dispatch => {
   const {decoded} = jwt_decode(token);
   dispatch(setUserData(decoded));

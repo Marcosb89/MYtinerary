@@ -68,7 +68,7 @@ class Itinerary extends React.Component {
     await this.props.getItineraryData(params.city_id);
   }
 
-  activitiesHeader() {
+  activitiesHeader() {    
     let urlImg = this.props.itineraryData.itinerary[0].urlImg;
     return (
       <div id='mainItineraryHeader'>
@@ -84,7 +84,8 @@ class Itinerary extends React.Component {
   }
 
   activitiesBox() {
-    let box = this.props.itineraryData.itinerary.map(activity => {
+    let box = this.props.itineraryData.itinerary.map((activity, index) => {
+      let activityIndex = index;
       let urlImg = activity.profilePic;
       let imgProfile = require('../assets/images/' + urlImg);
       let id = activity._id;
@@ -103,7 +104,8 @@ class Itinerary extends React.Component {
               <p>{user}</p>
             </div>
             <div className='activityBox'>         
-              {this.props.auth.user.id ? <LikeBtn activityId = {id}/> : <div></div>}
+              {this.props.auth.user.id ? <LikeBtn index = {activityIndex}
+              activityId = {id}/> : <div></div>}
               <h1>{title}</h1>
               <p>Likes: {rating}</p>
               <p>{duration} Hours</p>

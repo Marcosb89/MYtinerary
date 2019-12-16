@@ -9,6 +9,14 @@ const authReducer = (state = initialState, action) => {
         ...state,
         user: action.payload
       }
+    case 'SET_USER_LIKES':
+    return{
+      ...state,
+      user: {
+        ...state.user, 
+        likes: action.payload
+      }
+    }
     default:
       return state;
   }

@@ -13,7 +13,7 @@ import Comments from './Comments';
 //---------------
 const ItineraryButton = props => {
   let activity = props.objectActivity;
-  let index = props.index;
+  let activityIndex = props.activityIndex;
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   return (
@@ -27,7 +27,7 @@ const ItineraryButton = props => {
               Activities
             </h2>
             <ItineraryCarousel activity2={activity} />
-            <Comments index={index}/>
+            <Comments activityIndex={activityIndex}/>
           </CardBody>
         </Card>
       </Collapse>
@@ -100,7 +100,7 @@ class Itinerary extends React.Component {
               <br />
             </div>
           </div>
-          <ItineraryButton objectActivity={activityData} index={activityIndex}/>
+          <ItineraryButton objectActivity={activityData} activityIndex={activityIndex}/>
         </div>
       );
     });

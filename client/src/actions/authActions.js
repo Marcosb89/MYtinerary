@@ -30,6 +30,6 @@ export const setUserLikes = data => {
 }
 
 export const googleSign = (token) => dispatch => {
-  const {decoded} = jwt_decode(token);
+  const decoded = jwt_decode(token);
   dispatch(setUserData(decoded));
 }

@@ -161,6 +161,14 @@
   color: #fff;
 }
 
+#commentIcon{
+	float: right;
+	width: 3vw;
+	margin-right: 5px;
+	margin-top: 5px;
+	background-color: #ddd;
+}
+
 /*--------------
 -----Classes----
 --------------*/
@@ -478,4 +486,36 @@ span.carousel-control-next-icon {
 	margin-left: 2vw;
 	font-size: 2vw;
 	color: #f00;
+}
+
+.allCommentsBox{
+	width: 100%;
+	margin-top: 10px;
+	float: left;
+	background-color: rgba(221, 221, 221, 0);
+}
+
+.singleCommentBox{
+	background-color: #ddd;
+	border: 2px #aaa solid;
+	border-radius: 0%;
+	margin-bottom: 10px;
+}
+
+.allCommentsBox h6, .allCommentsBox p{
+	margin: 0;
+	text-align: left;
+}
+
+.allCommentsBox h6{
+	background-color: #ddd;
+	margin-left: 1vw;
+	font-size: 4vw;
+	font-weight: bold;
+}
+
+.allCommentsBox p{
+	background-color: #ddd;
+	margin-left: 4vw;
+	font-size: 3.5vw;
 }

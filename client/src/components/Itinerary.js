@@ -6,12 +6,14 @@ import { connect } from 'react-redux';
 import { getItineraryData } from '../actions/itineraryActions';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
 import ItineraryCarousel from './ItineraryCarousel';
+import Comments from './Comments';
 
 //---------------
 //VIEW ALL BUTTON
 //---------------
 const ItineraryButton = props => {
   let activity = props.objectActivity;
+  let index = props.index;
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   return (
@@ -25,27 +27,7 @@ const ItineraryButton = props => {
               Activities
             </h2>
             <ItineraryCarousel activity2={activity} />
-            <p
-              style={{ textAlign: 'left', fontSize: '3.5vw', marginTop: '2vh' }}
-            >
-              Comments
-            </p>
-            <input
-              id='itineraryInput'
-              type='text'
-              placeholder='Your comment...'
-            />
-            <input
-              type='image'
-              src={require('../assets/images/arrow2.png')}
-              alt='Submit Form'
-              style={{
-                float: 'right',
-                marginTop: '-1.25vh',
-                width: '3vw',
-                height: '4vw'
-              }}
-            />
+            <Comments index={index}/>
           </CardBody>
         </Card>
       </Collapse>
@@ -118,7 +100,7 @@ class Itinerary extends React.Component {
               <br />
             </div>
           </div>
-          <ItineraryButton objectActivity={activityData} />
+          <ItineraryButton objectActivity={activityData} index={activityIndex}/>
         </div>
       );
     });

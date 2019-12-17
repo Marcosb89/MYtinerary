@@ -17,9 +17,8 @@ const loginRoutes = require('./routes/loginRoutes');
 const googleRoutes = require('./routes/googleRoutes');
 const citiesRoutes = require('./routes/citiesRoutes');
 const itinerariesRoutes = require('./routes/itinerariesRoutes');
-//const activitiesRoutes = require('./routes/activitiesRoutes');
 const likesRoutes = require('./routes/likesRoutes');
-//const commentsRoutes = require('./routes/commentsRoutes');
+const commentsRoutes = require('./routes/commentsRoutes');
 
 //Access to MongoDB
 mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true }, err => {
@@ -38,12 +37,11 @@ router.use(function(req, res, next) {
 app.use('/', router);
 app.use('/users', registerRoutes);
 app.use('/users', loginRoutes);
-app.use('/api', googleRoutes);
+app.use('/auth', googleRoutes);
 app.use('/', citiesRoutes);
 app.use('/', itinerariesRoutes);
-//app.use('/', activitiesRoutes);
 app.use('/users', likesRoutes);
-//app.use('/', commentsRoutes);
+app.use('/users', commentsRoutes);
 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

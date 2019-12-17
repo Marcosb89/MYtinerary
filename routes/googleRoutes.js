@@ -11,6 +11,7 @@ const user = usersModel;
 require('dotenv').config();
 const host = process.env.HOST + process.env.CLIENT_PORT;
 const mongoKey = process.env.MONGO_SECRET_OR_KEY;
+//const mongoKey = 'secret';
 
 require('../config/passportGoogle');
 
@@ -24,8 +25,7 @@ router.get('/google',
 
 router.get('/google/redirect',
   passport.authenticate('google', { failureRedirect: 'http://localhost:3000/', session: false }),
-  function (req, res) {
-    var mongoKey = process.env.MONGO_SECRET_OR_KEY;
+  function (req, res) {    
     user.findOne({ email: req.user._json.email }).then(user => {
       //Checks for existing user, if there is not, creates one
       if (!user) {
@@ -35,7 +35,7 @@ router.get('/google/redirect',
           urlPic: req.user._json.picture,
           likes: [],
           google: true
-        });
+        });        
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(newUser.password, salt, (err, hash) => {
             if (err) throw err;

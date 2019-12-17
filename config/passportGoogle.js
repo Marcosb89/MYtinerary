@@ -12,7 +12,7 @@ passport.use(
   new GoogleStrategy({
       clientID: googleId,
       clientSecret: googleSecret,
-      callbackURL: url + '/auth/google/redirect'
+      callbackURL: 'http://localhost:5000/auth/google/redirect'
     },
     function(accessToken, refreshToken, profile, cb) { 
       cb(null, profile)

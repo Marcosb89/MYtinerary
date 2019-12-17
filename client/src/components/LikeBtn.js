@@ -12,6 +12,7 @@ class LikeBtn extends React.Component {
     super();
     this.state = {
       isLiked: false,
+      disabled: false
     }
   }  
 
@@ -42,22 +43,17 @@ class LikeBtn extends React.Component {
   }
 
   async handleClick(){
+    this.setState({disabled: true})
     var itId = this.props.activityId;
     var userId = this.props.auth.user.id;
     await axios.put(`http://localhost:5000/users/likes/postlike/${userId}/${itId}`)
-    .then((res) => {
-      console.log(res.data)
+    .then((res) => {        
       this.props.itinerary.itinerary[this.props.index].rating = res.data.rating;
       this.props.setUserLikes(res.data.likes)
       this.setState({ isLiked: !this.state.isLiked })
-      console.log(this.props)
-      //deshabilitar boton 
     })
-    
-
-    //Para que hace esto? ====> this.props.getItineraryData(this.props.cityId);
-
-
+    .then(this.setState({disabled: false}))
+ 
     // .then(res => {
     //   console.log(res.data)
     // })
@@ -72,11 +68,13 @@ class LikeBtn extends React.Component {
 
   render(){
     return(
-      <button id='btnLike' onClick={this.handleClick.bind(this)}>
-         {(this.state.isLiked === false) ? 
-         <img id='like' src={require('../assets/images/heart.png')} alt='like'/> : 
-         <img id='like' src={require('../assets/images/heartFull.png')} alt='like'/>}  
-         {/* <p>Likes: {this.props.itinerary.itinerary[this.props.index].rating}</p> */}   
+      <button id='btnLike' onClick={this.handleClick.bind(this)} 
+      disabled={this.state.disabled}>
+        {this.state.disabled ? <div>Disabled</div> : [
+          (this.state.isLiked === false 
+            ? <img id='like' src={require('../assets/images/heart.png')} alt='like'/> 
+            : <img id='like' src={require('../assets/images/heartFull.png')} alt='like'/>
+            )]}
       </button>
     )
   }

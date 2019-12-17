@@ -5,7 +5,7 @@ import { googleSign } from '../actions/authActions';
 class Login extends React.Component {
 
   componentDidMount() {
-    const { token } = this.props.match.params;
+    const { token } = this.props.match.params;    
     this.props.googleSign(token);
     this.props.history.push("/")
 

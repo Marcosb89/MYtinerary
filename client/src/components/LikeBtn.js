@@ -72,8 +72,8 @@ class LikeBtn extends React.Component {
       disabled={this.state.disabled}>
         {this.state.disabled ? <div>Disabled</div> : [
           (this.state.isLiked === false 
-            ? <img id='like' src={require('../assets/images/heart.png')} alt='like'/> 
-            : <img id='like' src={require('../assets/images/heartFull.png')} alt='like'/>
+            ? <img key={1} id='like' src={require('../assets/images/heart.png')} alt='like'/> 
+            : <img key={2} id='like' src={require('../assets/images/heartFull.png')} alt='like'/>
             )]}
       </button>
     )

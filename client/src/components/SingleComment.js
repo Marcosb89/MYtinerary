@@ -1,22 +1,24 @@
 import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { getItineraryData } from '../actions/itineraryActions';
+
 
 class SingleComment extends React.Component {
   constructor (props){
     super(props);
     this.state = {
-
+      comment: this.props.commentData
     };
     this.deleteComment = this.deleteComment.bind(this);
     this.editComment = this.editComment.bind(this);
   }
 
   commentary(){    
-    let commentData = this.props.commentData;
-    let user = commentData.user;
-    let text = commentData.text;
-    let userId = commentData.userId;
+    console.log(this.state.comment); 
+    let user = this.state.comment.user;
+    let text = this.state.comment.text;
+    let userId = this.state.comment.userId;
         
     return(
       <div className='singleCommentBox'>
@@ -33,27 +35,28 @@ class SingleComment extends React.Component {
   }
 
   deleteComment(){
-    console.log('Delete');
     let itId = this.props.itinerary.itinerary[this.props.activityIndex]._id;
-    let userId = this.props.auth.user.id;
-    let commentUser = this.props.auth.user.email;
-    let commentText = this.props.itinerary.itinerary[this.props.activityIndex].comments[this.props.commentIndex].text;
+    let userId = this.state.comment.userId;
+    let commentUser = this.state.comment.user;
+    //let commentText = this.props.itinerary.itinerary[this.props.activityIndex].comments[this.props.commentIndex].text;
+    let commentText = this.state.comment.text;
     console.log(commentText);
     
-    axios.put(`http://localhost:5000/users/comments/delete/${userId}/${itId}`,{commentUser, commentText})
+    axios.put(`http://localhost:5000/users/comments/delete/${userId}/${itId}`,{commentUser, commentText})    
+    //this.props.modifyParentState();
   }
 
   editComment(){
-    console.log('Edit');
     let itId = this.props.itinerary.itinerary[this.props.activityIndex]._id;
-    let userId = this.props.auth.user.id;
-    let commentUser = this.props.auth.user.email;
-    let commentText = this.props.itinerary.itinerary[this.props.activityIndex].comments[this.props.commentIndex].text;
+    let userId = this.state.comment.userId;
+    let commentUser = this.state.comment.user;
+    //let commentText = this.props.itinerary.itinerary[this.props.activityIndex].comments[this.props.commentIndex].text;
+    let commentText = this.state.comment.text;
     axios.put(`http://localhost:5000/users/comments/edit/${userId}/${itId}`,{commentUser, commentText})
+    //this.props.modifyParentState();
   }
 
   render(){
-    console.log(this.props);
     return(
       <div className='allCommentsBox'>
         {this.commentary()}
@@ -72,4 +75,12 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null )(SingleComment);
+const mapDispatchToProps = dispatch => {
+  return {
+    getItineraryData: data => {
+      return dispatch(getItineraryData(data));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleComment);

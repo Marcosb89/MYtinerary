@@ -48,7 +48,7 @@ class Itinerary extends React.Component {
   async componentDidMount() {
     const {
       match: { params }
-    } = this.props;
+    } = this.props;    
     await this.props.getItineraryData(params.city_id);
   }
 
@@ -89,7 +89,7 @@ class Itinerary extends React.Component {
               <p>{user}</p>
             </div>
             <div className='activityBox'>         
-              {this.props.auth.user.id ? <LikeBtn index = {activityIndex}
+              {this.props.auth.user.id ? <LikeBtn key={activityIndex} index = {activityIndex}
                 activityId={id} /> : <div></div>}
               <h1>{title}</h1>
               <p>Likes: {rating}</p>

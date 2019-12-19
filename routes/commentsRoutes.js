@@ -24,13 +24,10 @@ router.put("/comments/post/:userId/:itineraryId", cors(), (req, res) => {
 
 router.put("/comments/delete/:userId/:itineraryId", cors(), (req, res) => {
   itineraryMod.findByIdAndUpdate(req.params.itineraryId, 
-    {$pull: {comments: {user: req.body.commentUser, text: req.body.commentText}}}, {new:true},
-  function(err){
-    if(err){
-      res.status(400).send('Error2');;
-    }
-  }  
-  )
+    {$pull: {comments: {user: req.body.commentUser, text: req.body.commentText}}})
+  .then(response => {
+    res.status(200).json(response.comments)
+  })
 })
 
 router.put("/comments/edit/:userId/:itineraryId", cors(), async (req, res) => {

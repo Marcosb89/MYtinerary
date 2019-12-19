@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import { getComments } from '../actions/commentsActions';
 
@@ -9,11 +10,18 @@ class SingleComment extends React.Component {
       comment: this.props.commentData,
       edit: false,
       editCommentText: this.props.commentData.text,
+      value: this.props.value
     };
     this.deleteComment = this.deleteComment.bind(this);
     this.editComment = this.editComment.bind(this);
     this.submitEdit = this.submitEdit.bind(this);
     this.closeEdit = this.closeEdit.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.value !== this.props.value) {
+      this.setState({value: this.props.value});
+    }
   }
 
   commentary(){    
@@ -50,13 +58,13 @@ class SingleComment extends React.Component {
   }
 
   async deleteComment(){
-    let comment={
-      itId : this.props.itinerary.itinerary[this.props.activityIndex]._id,
-      userId : this.state.comment.userId,
-      commentUser : this.state.comment.user,
-      commentText : this.state.comment.text,
-  }
-  this.props.deleteComment(comment)
+    let itId = this.props.itinerary.itinerary[this.props.activityIndex]._id;
+    let userId = this.state.comment.userId;
+    let commentUser = this.state.comment.user;
+    let commentText = this.state.comment.text;    
+    await axios.put(`http://localhost:5000/users/comments/delete/${userId}/${itId}`,{commentUser, commentText}) 
+    await this.props.getComments(itId)   
+    this.props.modifyParentState();
   }
 
   editComment(){
@@ -68,17 +76,16 @@ class SingleComment extends React.Component {
 	}
 
   async submitEdit(){
-    let comment={
-      itId : this.props.itinerary.itinerary[this.props.activityIndex]._id,
-      userId : this.state.comment.userId,
-      commentUser : this.state.comment.user,
-      commentText : this.state.comment.text,
-      newCommentText : this.state.editCommentText    
-    }
-    this.props.editComment(comment)
+    let itId = this.props.itinerary.itinerary[this.props.activityIndex]._id;
+    let userId = this.state.comment.userId;
+    let commentUser = this.state.comment.user;
+    let commentText = this.state.comment.text;
+    let newCommentText = this.state.editCommentText;
+    await axios.put(`http://localhost:5000/users/comments/edit/${userId}/${itId}`,{commentUser, commentText, newCommentText})
+    await this.props.getComments(itId)
     this.setState({edit: false})
+    this.props.modifyParentState();
   }
-
 
   closeEdit(){
     this.setState({edit: false})

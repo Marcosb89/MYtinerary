@@ -13,11 +13,18 @@ class Comments extends React.Component {
       commentText:'',
       commentIndex: 0,
       comments: [],
+      value: this.props.value
     };
     this.submitComment = this.submitComment.bind(this);
     this.updateText = this.updateText.bind(this);
     this.modifyParentState = this.modifyParentState.bind(this);
     this.resetSubmitValue = this.resetSubmitValue.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.value !== this.props.value) {
+      this.setState({value: this.props.value});
+    }
   }
 
   resetSubmitValue(){
@@ -58,27 +65,6 @@ class Comments extends React.Component {
     }else alert('You must log in')
   }
 
-  deleteComment = async(comment) => { 
-    console.log(this.state.comments)    
-    await axios.put(`http://localhost:5000/users/comments/delete/${comment.userId}/${comment.itId}`,
-    {commentUser:comment.commentUser, commentText:comment.commentText}) 
-    .then(res => {
-      this.setState({comments: res.data})
-    })
-    await this.props.getComments(comment.itId)
-    this.modifyParentState();
-  }
-
-  editComment= async(comment)=>{
-    await axios.put(`http://localhost:5000/users/comments/edit/${comment.userId}/${comment.itId}`,
-    {commentUser:comment.commentUser, commentText:comment.commentText, newCommentText:comment.newCommentText})
-    .then(res => {
-      this.setState({comments: res.data})
-    })
-    await this.props.getComments(comment.itId)
-    this.modifyParentState();
-  }
-
   render(){
     let activityIndex= this.props.activityIndex;
     return(
@@ -89,9 +75,8 @@ class Comments extends React.Component {
         value={this.state.commentText} onChange={(e) => this.updateText(e.target.value)}/>
         <input type='image' src={require('../assets/images/arrow2.png')} onClick={this.submitComment}
           alt='Submit comment' style={{float: 'right', marginTop: '-1.25vh', width: '3vw', height: '4vw', backgroundColor: '#eee'}}/>
-        {/* {this.props.itinerary.itinerary[this.props.activityIndex].comments.map((comment, index) =>  */}
-        {this.state.comments.map((comment, index) => 
-        <SingleComment key={index} /* modifyParentState={this.modifyParentState} */ editComment={this.editComment} deleteComment={this.deleteComment} commentData={comment} commentIndex={index} activityIndex={activityIndex}/>)}
+        {this.props.itinerary.itinerary[this.props.activityIndex].comments.map((comment, index) => 
+        <SingleComment key={index} modifyParentState={this.modifyParentState} commentData={comment} commentIndex={index} activityIndex={activityIndex}/>)}
       </div>
     )
   }

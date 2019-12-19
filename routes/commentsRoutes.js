@@ -30,7 +30,7 @@ router.put("/comments/delete/:userId/:itineraryId", cors(), (req, res) => {
   })
 })
 
-router.put("/comments/edit/:userId/:itineraryId", cors(), async (req, res) => {
+router.put("/comments/edit/:userId/:itineraryId", cors(), async(req, res) => {
   await itineraryMod.findByIdAndUpdate(req.params.itineraryId, 
     {$pull: {comments: {user: req.body.commentUser, text: req.body.commentText, userId: req.params.userId}}})
   await itineraryMod.findByIdAndUpdate(req.params.itineraryId, 

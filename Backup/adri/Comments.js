@@ -12,31 +12,41 @@ class Comments extends React.Component {
     this.state = {
       commentText:'',
       commentIndex: 0,
-      comments: []
+      comments: [],
+      value: this.props.value
     };
     this.submitComment = this.submitComment.bind(this);
     this.updateText = this.updateText.bind(this);
-    this.prepareComments = this.prepareComments.bind(this);
+    this.modifyParentState = this.modifyParentState.bind(this);
+    this.resetSubmitValue = this.resetSubmitValue.bind(this);
   }
 
-  prepareComments = async() => {
-    let itId = this.props.itinerary.itinerary[this.props.activityIndex]._id;
-    await this.props.getComments(itId);
-    await this.props.getItineraryData(this.props.itinerary.itinerary[this.props.activityIndex].id);
-    await this.setState({comments: this.props.comments.comments});
-    console.log(this.state.comments);
-    console.log(this.props.itinerary.itinerary[this.props.activityIndex].comments); 
+  componentDidUpdate(prevProps) {
+    if(prevProps.value !== this.props.value) {
+      this.setState({value: this.props.value});
+    }
+  }
+
+  resetSubmitValue(){
+    this.setState({commentText: ''})
+  }
+
+  async modifyParentState(){
+    this.setState({ comments: this.props.comments.comments}, 
+      () => console.log(this.state.comments))
+    this.props.getItineraryData(this.props.itinerary.itinerary[this.props.activityIndex].id);
+    this.resetSubmitValue();
   }
 
   async componentDidMount() {
-    this.props.getItineraryData(this.props.itinerary.itinerary[this.props.activityIndex].id);
     let itId = this.props.itinerary.itinerary[this.props.activityIndex]._id;
-    await this.props.getComments(itId);
-    this.setState({ comments: this.props.comments.comments });
+    await this.props.getComments(itId)
+    this.setState({ comments: this.props.comments.comments })
+    this.resetSubmitValue();
   }
 
   updateText = (commentText) => {
-    this.setState({commentText});
+    this.setState({commentText})
 	}
 
   submitComment = async (e) => {
@@ -46,22 +56,24 @@ class Comments extends React.Component {
       let commentId = this.props.auth.user.id;
       let commentUser = this.props.auth.user.email;
       let commentText = this.state.commentText;
-      await axios.put(`http://localhost:5000/users/comments/post/${commentId}/${itId}`,{commentUser, commentText});
-      this.prepareComments();
-      this.setState({commentText: ''})
-    }else alert('You must log in');
-  }
-
-  deleteComment = async(comment) => { 
-    await axios.put(`http://localhost:5000/users/comments/delete/${comment.userId}/${comment.itId}`,
-    {commentUser:comment.commentUser, commentText:comment.commentText});
-    this.prepareComments();
+      await axios.put(`http://localhost:5000/users/comments/post/${commentId}/${itId}`,{commentUser, commentText})
+      .then(res => {
+        this.setState({comments: res.data})
+      })
+      await this.props.getComments(itId)
+      this.modifyParentState();
+    }else alert('You must log in')
   }
 
   editComment= async(comment)=>{
-    await axios.put(`http://localhost:5000/users/comments/edit/${comment.userId}/${comment.itId}`,
-    {commentUser:comment.commentUser, commentText:comment.commentText, newCommentText:comment.newCommentText})
-    await this.prepareComments();
+      await axios.put(`http://localhost:5000/users/comments/edit/${comment.userId}/${comment.itId}`,{commentUser:comment.commentUser, commentText:comment.commentText, newCommentText:comment.newCommentText})
+      .then(res => {
+        this.setState({comments: res.data})
+      })
+      await this.props.getComments(comment.itId)
+      this.props.getItineraryData(this.props.itinerary.itinerary[this.props.activityIndex].id);
+      this.setState({ comments: this.props.comments.comments })
+    
   }
 
   render(){
@@ -74,9 +86,9 @@ class Comments extends React.Component {
         value={this.state.commentText} onChange={(e) => this.updateText(e.target.value)}/>
         <input type='image' src={require('../assets/images/arrow2.png')} onClick={this.submitComment}
           alt='Submit comment' style={{float: 'right', marginTop: '-1.25vh', width: '3vw', height: '4vw', backgroundColor: '#eee'}}/>
-        {/* {this.props.itinerary.itinerary[this.props.activityIndex].comments.map((comment, index) => */}
+        {/* {this.props.itinerary.itinerary[this.props.activityIndex].comments.map((comment, index) =>  */}
         {this.state.comments.map((comment, index) => 
-        <SingleComment key={index} editComment={this.editComment} deleteComment={this.deleteComment} 
+        <SingleComment key={index} /* modifyParentState={this.modifyParentState} */ editComment={this.editComment} 
         commentData={comment} commentIndex={index} activityIndex={activityIndex}/>)}
       </div>
     )

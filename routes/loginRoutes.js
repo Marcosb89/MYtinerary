@@ -21,7 +21,7 @@ router.post('/login', (req, res) => {
   // Find user by email
   userMod.findOne({ email }).then(user => {
     // Check if user exists
-    if (!userMod) {
+    if (!user) {
       return res.status(404).json({ emailnotfound: 'Email not found' });
     }
     // Check password

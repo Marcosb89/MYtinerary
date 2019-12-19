@@ -3,6 +3,8 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import SingleComment from './SingleComment';
 import { getComments } from '../actions/commentsActions';
+import { getItineraryData } from '../actions/itineraryActions';
+
 
 class Comments extends React.Component {
   constructor (props){
@@ -10,30 +12,37 @@ class Comments extends React.Component {
     this.state = {
       commentText:'',
       commentIndex: 0,
-      comments: []
-      //changeCommentsState: false
+      comments: [],
+      value: this.props.value
     };
     this.submitComment = this.submitComment.bind(this);
     this.updateText = this.updateText.bind(this);
-    //this.modifyParentState = this.modifyParentState.bind(this);
+    this.modifyParentState = this.modifyParentState.bind(this);
+    this.resetSubmitValue = this.resetSubmitValue.bind(this);
   }
 
-  /*componentWillReceiveProps() {
-    //RESOLVER EL LOOP!!!!!!!!!!!!!!!!!!!!!!!!!!
-    console.log('Get itin data'); 
-  }*/
+  componentDidUpdate(prevProps) {
+    if(prevProps.value !== this.props.value) {
+      this.setState({value: this.props.value});
+    }
+  }
 
-  /*modifyParentState(){
-    this.setState({ changeCommentsState: !this.state.changeCommentsState }, 
-      () => console.log(this.state.changeCommentsState))
+  resetSubmitValue(){
+    this.setState({commentText: ''})
+  }
+
+  async modifyParentState(){
+    this.setState({ comments: this.props.comments.comments}, 
+      () => console.log(this.state.comments))
     this.props.getItineraryData(this.props.itinerary.itinerary[this.props.activityIndex].id);
-
-  }*/
+    this.resetSubmitValue();
+  }
 
   async componentDidMount() {
     let itId = this.props.itinerary.itinerary[this.props.activityIndex]._id;
     await this.props.getComments(itId)
     this.setState({ comments: this.props.comments.comments })
+    this.resetSubmitValue();
   }
 
   updateText = (commentText) => {
@@ -48,10 +57,11 @@ class Comments extends React.Component {
       let commentUser = this.props.auth.user.email;
       let commentText = this.state.commentText;
       await axios.put(`http://localhost:5000/users/comments/post/${commentId}/${itId}`,{commentUser, commentText})
-      //this.modifyParentState();
       .then(res => {
         this.setState({comments: res.data})
       })
+      await this.props.getComments(itId)
+      this.modifyParentState();
     }else alert('You must log in')
   }
 
@@ -86,7 +96,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getComments: data => {
-      return dispatch(getComments(data));
+      return dispatch(getComments(data))},
+    getItineraryData: data => {
+      return dispatch(getItineraryData(data));
     }
   };
 };

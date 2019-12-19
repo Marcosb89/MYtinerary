@@ -1,7 +1,6 @@
 import React from 'react';
 import Toolbar from './Toolbar';
 import axios from 'axios';
-import jwt_decode from 'jwt-decode';
 import { setUserData } from '../actions/authActions';
 import { connect } from 'react-redux';
 import { loginUser } from '../actions/authActions';
@@ -124,8 +123,7 @@ class CreateAccount extends React.Component {
 		e.preventDefault()
 	 const { email, password, urlPic } = this.state
 	 let response = await axios.post('http://localhost:5000/users/register', {email, password, urlPic})
-	 let userData = jwt_decode(response.data.token);
-	 this.props.setUserData(userData);
+	 this.props.setUserData(response.data);
 	 this.props.history.push('/');
 	}
 

@@ -33,15 +33,14 @@ router.put("/comments/delete/:userId/:itineraryId", cors(), (req, res) => {
   )
 })
 
-router.put("/comments/edit/:userId/:itineraryId", cors(), (req, res) => {
-  itineraryMod.findByIdAndUpdate(req.params.itineraryId, 
-    {$pull: {comments: {user: req.body.commentUser, text: req.body.commentText, userId: req.params.userId}}}, {new:true},
-  function(err){
-    if(err){
-      res.status(400).send('Error2');;
-    }
-  }  
-  )
+router.put("/comments/edit/:userId/:itineraryId", cors(), async (req, res) => {
+  await itineraryMod.findByIdAndUpdate(req.params.itineraryId, 
+    {$pull: {comments: {user: req.body.commentUser, text: req.body.commentText, userId: req.params.userId}}})
+  await itineraryMod.findByIdAndUpdate(req.params.itineraryId, 
+    {$push: {comments: {user: req.body.commentUser, text: req.body.newCommentText, userId: req.params.userId}}})
+  .then(response => {
+    res.status(200).json(response.comments)
+  })
 })
 
 module.exports = router;

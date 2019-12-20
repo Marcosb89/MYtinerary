@@ -54,7 +54,11 @@ class Comments extends React.Component {
 
   deleteComment = async(comment) => { 
     await axios.put(`http://localhost:5000/users/comments/delete/${comment.userId}/${comment.itId}`,
-    {commentUser:comment.commentUser, commentText:comment.commentText});
+    {commentUser:comment.commentUser, commentText:comment.commentText})
+    .then(res => {
+      this.setState({ comments: [] })
+      return res;
+    })
     this.prepareComments();
   }
 
@@ -65,7 +69,6 @@ class Comments extends React.Component {
         this.setState({comments:[]})
         return res;
       })
-    console.log(this.state.comments)
     await this.prepareComments();
   }
 

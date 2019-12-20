@@ -31,10 +31,6 @@ class Login extends React.Component {
 		window.location.href =  'http://localhost:5000/auth/google'
 		//http://localhost:5000/auth/google
    }
-
-	// googleLogOut = () => {
-	// 	window.location.href = "https://mail.google.com/mail/u/0/?logout&hl=en";
-	// }
 	
 	updateEmail = (email) => {
     this.setState({email})
@@ -67,8 +63,7 @@ class Login extends React.Component {
 				<br/>
 				<Link style={{fontSize:'4vw',}} to='/'>Forgot your username or password?</Link>
 				<p>Social media login</p>
-				<button onClick={this.googleLogIn}>Google In</button>
-				<button onClick={this.googleLogOut}>Google Out</button>
+					<img id='googleLogin' src={require('../assets/images/google.png')} onClick={this.googleLogIn}/>
 			</div>
 		)
 	}

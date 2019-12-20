@@ -73,8 +73,11 @@ class SingleComment extends React.Component {
       userId : this.state.comment.userId,
       commentUser : this.state.comment.user,
       commentText : this.state.comment.text,
+      commentIndex: this.props.commentIndex,
       newCommentText : this.state.editCommentText    
     }
+    console.log(this.props.commentIndex);
+    
     this.props.editComment(comment)
     this.setState({edit: false})
   }

@@ -60,7 +60,12 @@ class Comments extends React.Component {
 
   editComment= async(comment)=>{
     await axios.put(`http://localhost:5000/users/comments/edit/${comment.userId}/${comment.itId}`,
-    {commentUser:comment.commentUser, commentText:comment.commentText, newCommentText:comment.newCommentText})
+    {commentUser:comment.commentUser, commentText:comment.commentText, newCommentText:comment.newCommentText, commentIndex: comment.commentIndex})
+    .then(res =>  {
+        this.setState({comments:[]})
+        return res;
+      })
+    console.log(this.state.comments)
     await this.prepareComments();
   }
 
